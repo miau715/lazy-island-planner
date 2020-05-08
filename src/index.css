@@ -4,6 +4,7 @@ body {
 canvas {
   display: block;
   margin: 30px auto;
+  background: rgb(119, 214, 194);
 }
 
 #inputCanvas {
