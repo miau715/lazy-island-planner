@@ -68,6 +68,7 @@ aside button:focus {
 
 aside button.active, aside button.color.active {
   border-color: #fff;
+  box-shadow: none;
 }
 
 aside button.mode.active {
@@ -97,17 +98,31 @@ aside button.color img {
 }
 
 aside button.colorCustom {
-  background: #000;
+  background: #b0a07c;
+  position: relative;
+  overflow: hidden;
+}
+
+aside button.colorCustom input {
+  position: absolute;
+  border: none;
+  padding: 0;
+  width: 50px;
+  height: 50px;
+  top: -5px;
+  left: -5px;
 }
 
 aside button.colorCustom img {
   display: block;
+  position: relative;
   max-width: 25px;
   max-height: 25px;
   margin: 0 auto;
 }
 
-aside button.item {
+aside button.building {
+  background: #544f40;
 }
 
 aside button.item.home {
@@ -118,8 +133,12 @@ aside button.item.house {
   background: #f8b616;
 }
 
-aside button.item.store, aside button.item.apparel, aside button.item.museum, aside button.item.infoCenter, aside button.item.camp, aside button.item.store {
-  background: #544f40;
+aside button.bridge {
+  background: #77d6c2;
+}
+
+aside button.slope {
+  background: #468045;
 }
 
 canvas {

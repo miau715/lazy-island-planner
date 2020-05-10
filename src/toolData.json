@@ -28,7 +28,7 @@
         {
           "colorName": "colorG1",
           "image": "icon_colorG1.jpg",
-          "color": ["#3c783b", "#598447", "#3d783c", "#417a40", "#518349"]
+          "color": ["#3c783b", "#437c42", "#3d783c", "#417a40", "#458042"]
         },
         {
           "colorName": "colorG2",
@@ -109,7 +109,7 @@
               "size": [4, 4]
             },
             {
-              "item": "store",
+              "item": "airPort",
               "image": "icon_airPort.svg",
               "size": [8, 8]
             }
@@ -122,18 +122,22 @@
           "items": [
             {
               "item": "b0",
-              "size": [2, 4]
-            },
-            {
-              "item": "b90",
+              "image": "icon_b0.svg",
               "size": [4, 2]
             },
             {
+              "item": "b90",
+              "image": "icon_b90.svg",
+              "size": [2, 4]
+            },
+            {
               "item": "b45",
+              "image": "icon_b45.svg",
               "size": [6, 6]
             },
             {
               "item": "b135",
+              "image": "icon_b135.svg",
               "size": [6, 6]
             }
           ]
@@ -145,11 +149,13 @@
           "items": [
             {
               "item": "s0",
-              "size": [2, 4]
+              "image": "icon_s0.svg",
+              "size": [4, 2]
             },
             {
               "item": "s90",
-              "size": [4, 2]
+              "image": "icon_s90.svg",
+              "size": [2, 4]
             }
           ]
         }
@@ -166,10 +172,10 @@
           "size": [3, 3],
           "items": [
             {
-              "item": "normal"
+              "item": "broadleaf"
             },
             {
-              "item": "pine"
+              "item": "conifer"
             },
             {
               "item": "apple"
@@ -230,7 +236,7 @@
           "size": [1, 1],
           "items": [
             {
-              "item": "normal"
+              "item": "fence"
             }
           ]
         }
