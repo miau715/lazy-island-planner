@@ -1,56 +1,125 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import paper from 'paper';
+import setting from './setting.json';
+import toolData from './toolData.json';
 import './index.css';
+
+function MenuModes(props) {
+  const toolData = props.toolData;
+  const listItems = toolData.map((mode, i) =>
+    <li key={i}>
+      <MenuBtn data={mode} type='mode' isActive={props.currentMode === mode.mode} onClick={props.onClick} />
+    </li>
+  );
+  return (
+    <ul>{listItems}</ul>
+  );
+}
+
+function MenuBtn(props) {
+  const alt = props.data.mode || props.data.tool || props.data.item || props.data.colorName;
+  let className;
+  const isActive = props.isActive ? 'active' : '';
+  if (props.data.colorName) {
+    className = `color ${props.data.colorName} ${isActive}`;
+  }
+  else if (props.data.item) {
+    className = `item ${props.type} ${props.data.item} ${isActive}`;
+  }
+  else {
+    className = `${props.type} ${isActive}`;
+  }
+  if (props.data.image) {
+    return (
+      <button id={props.data.mode} onClick={props.onClick} className={className}>
+        <img alt={alt} src={props.data.image} />
+      </button>
+    )
+  }
+  else {
+    const colorStyle = {color: props.data.item};
+    return (
+      <button id={props.data.mode} onClick={props.onClick} className={className}>
+        <div className="colorBlock" style={colorStyle}></div>
+      </button>
+    )
+  }
+}
+
+function MenuTools(props) {
+  const listItems = props.currentModeData.tools.map((tool, i) =>
+    <li key={i}>
+      <MenuBtn data={tool} type='tool' isActive={props.currentTool === tool.tool} onClick={props.onClick} />
+    </li>
+  );
+  return (
+    <ul>
+      {listItems}
+    </ul>
+  );
+}
+
+function MenuItems(props) {
+  let menuItems, compareTarget;
+  const type = props.currentTool;
+  if (props.currentMode === 'draw') {
+    menuItems = props.currentModeData.colors;
+    compareTarget = 'colorName';
+  }
+  else {
+    const currentTool = props.currentModeData.tools.find((data) => {
+        if (data.tool === props.currentTool) {
+          return data;
+        }
+      },
+    );
+    menuItems = currentTool.items;
+    compareTarget = 'item';
+  }
+  const listItems = menuItems.map((tool, i) =>
+    <li key={i}>
+      <MenuBtn data={tool} type={type} isActive={tool[compareTarget] === props.currentItem} onClick={props.onClick} />
+    </li>
+  );
+  return (
+    <div className="menuItems">
+      <hr />
+      <ul>
+        {listItems}
+      </ul>
+    </div>
+  )
+}
 
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.changeMode = this.changeMode.bind(this);
     this.state = {
-      canvas: null,
-      squareSize: 8,
-      squareCount: 16,
-      mapPadding: 50,
-      mapHUnit: 7,
-      mapVUnit: 6,
-      bgColor: 'rgb(119, 214, 194)',
-      gridColor: 'rgba(255, 255, 255, 0.2)',
-      mainGridColor: 'rgba(255, 255, 255, 0.4)',
-      sampleStartX: 354,
-      sampleStartY: 117,
-      sampleEndX: 953,
-      sampleEndY: 630,
-      colorG1: ['#3c783b', '#598447', '#3d783c', '#417a40', '#518349'],
-      colorG2: ['#42a140', '#49a646', '#40a03e', '#44a63f', '#4fa544'],
-      colorG3: ['#5dc549', '#5fc647', '#5bc746', '#6ecd51', '#5cc746'],
-      colorSand: ['#f0e8a7', '#ece5a2', '#ede7a6', '#ebe6a1', '#eee8b4'],
-      colorWater: ['#78d4c3', '#7bd8c3', '#7dd9c0', '#79d6c1', '#76d5c3'],
-      colorStone: ['#6e7484', '#818793', '#6e7689', '#6f7684', '#747788'],
-
-      sizeMyHome: [5, 4],
-      sizeHome: [4,4],
-      sizeStore: [7, 4],
-      sizeApparel: [5, 4],
-      sizeMuzeum: [7, 4],
-      sizeInfoCenter: [12, 10],
-      sizeCamp: [4, 4],
-      currentMode: ''
+      canvasSizeX: setting.squareSize * setting.squarePerBlock * setting.mapXBlock + setting.mapPadding * 2,
+      canvasSizeY: setting.squareSize * setting.squarePerBlock * setting.mapYBlock + setting.mapPadding * 2,
+      squareSize: setting.squareSize,
+      currentMode: toolData.toolData[0].mode,
+      currentModeData: toolData.toolData[0],
+      currentTool: toolData.toolData[0].tools[0].tool,
+      currentItem: toolData.toolData[0].colors[0].colorName
     };
   }
   componentDidMount() {
     const canvas = document.getElementById('canvas');
-    canvas.width = this.state.squareSize * this.state.squareCount * this.state.mapHUnit + this.state.mapPadding * 2;
-    canvas.height = this.state.squareSize * this.state.squareCount * this.state.mapVUnit + this.state.mapPadding * 2;
+    canvas.width = this.state.canvasSizeX;
+    canvas.height = this.state.canvasSizeY;
     paper.setup(canvas);
-    this.setState({
-      canvas: canvas
-    });
 
     const url = 'test.jpg';
     let raster = new paper.Raster(url);
     const mapLayer = new paper.Layer();
+    mapLayer.name = 'mapLayer';
     const drawLayer = new paper.Layer();
+    drawLayer.name = 'drawLayer';
     const buildLayer = new paper.Layer();
+    buildLayer.name = 'buildLayer';
     mapLayer.activate();
     const bgRect = new paper.Path.Rectangle({
       x: 0,
@@ -58,70 +127,29 @@ class App extends React.Component {
       width: canvas.width,
       height: canvas.height,
     });
-    bgRect.fillColor = this.state.bgColor;
+    bgRect.fillColor = setting.colorBg;
     raster.onLoad = () => {
       mapLayer.activate();
-      const mapRasterWidth = this.state.sampleEndX - this.state.sampleStartX;
-      const mapRasterHeight = this.state.sampleEndY - this.state.sampleStartY;
-      const mapRaster = raster.getSubRaster(new paper.Rectangle(this.state.sampleStartX, this.state.sampleStartY, mapRasterWidth, mapRasterHeight));
+      const mapRasterWidth = setting.sampleEndX - setting.sampleStartX;
+      const mapRasterHeight = setting.sampleEndY - setting.sampleStartY;
+      const mapRaster = raster.getSubRaster(new paper.Rectangle(setting.sampleStartX, setting.sampleStartY, mapRasterWidth, mapRasterHeight));
       raster.remove();
       mapRaster.visible = false;
-      mapRaster.size = new paper.Size(this.state.squareCount * this.state.mapHUnit, this.state.squareCount * this.state.mapVUnit);
+      mapRaster.size = new paper.Size(setting.squarePerBlock * setting.mapXBlock, setting.squarePerBlock * setting.mapYBlock);
       for (let y = 0; y < mapRaster.height; y++) {
         for(let x = 0; x < mapRaster.width; x++) {
           const color = mapRaster.getPixel(x, y);
-          //let prevColor;
           const pixelRect = new paper.Path.Rectangle({
-            x: x * this.state.squareSize + this.state.mapPadding, 
-            y: y * this.state.squareSize + this.state.mapPadding,
+            x: x * this.state.squareSize + setting.mapPadding, 
+            y: y * this.state.squareSize + setting.mapPadding,
             width: this.state.squareSize,
             height: this.state.squareSize
           });
           pixelRect.fillColor = color;
-          /*pixelRect.onMouseEnter = function(e) {
-            this.fillColor = 'red';
-            prevColor = color;
-          }
-          pixelRect.onMouseLeave = function(e) {
-            this.fillColor = prevColor;
-          }*/
         }
       }
-
     }
-    
-    // addGrid
-    const gridLayer = new paper.Layer();
-    gridLayer.activate();
-    //console.log(paper.Project);
-    let gridLine;
-    const dashStroke = [this.state.squareSize + 5, this.state.squareSize - 2]
-    for(let x = 0; x <= this.state.squareCount * this.state.mapHUnit; x++) {
-      if (x % this.state.squareCount === 0) {
-        gridLine = new paper.Path.Line(new paper.Point(x * this.state.squareSize + this.state.mapPadding - 0.5, 0), new paper.Point(x * this.state.squareSize + this.state.mapPadding - 0.5, canvas.height));
-        gridLine.strokeWidth = 3;
-        gridLine.dashArray = dashStroke;
-        gridLine.strokeColor = this.state.mainGridColor;
-      }
-      else {
-        gridLine = new paper.Path.Line(new paper.Point(x * this.state.squareSize + this.state.mapPadding - 0.5, this.state.mapPadding), new paper.Point(x * this.state.squareSize + this.state.mapPadding - 0.5, canvas.height - this.state.mapPadding));
-        gridLine.strokeColor = this.state.gridColor;
-      }
-      gridLine.locked = true;
-    }
-    for(let y = 0; y <= this.state.squareCount * this.state.mapVUnit; y++) {
-      if (y % this.state.squareCount === 0) {
-        gridLine = new paper.Path.Line(new paper.Point(0, y * this.state.squareSize + this.state.mapPadding - 0.5), new paper.Point(canvas.width, y * this.state.squareSize + this.state.mapPadding - 0.5));
-        gridLine.strokeWidth = 3;
-        gridLine.dashArray = dashStroke;
-        gridLine.strokeColor = this.state.mainGridColor;
-      }
-      else {
-        gridLine = new paper.Path.Line(new paper.Point(this.state.mapPadding, y * this.state.squareSize + this.state.mapPadding - 0.5), new paper.Point(canvas.width - this.state.mapPadding, y * this.state.squareSize + this.state.mapPadding - 0.5));
-        gridLine.strokeColor = this.state.gridColor;
-      }
-      gridLine.locked = true;
-    }
+    this.renderGrid();
   }
   componentDidUpdate(prevProps) {
     if (this.state.currentMode === 'draw') {
@@ -137,7 +165,7 @@ class App extends React.Component {
       }
     }
     else if (this.state.currentMode === 'build') {
-      paper.project.layers[3].activate();
+      /*paper.project.layers[3].activate();
       const buildTool = new paper.Tool();
       buildTool.activate();
       
@@ -146,14 +174,14 @@ class App extends React.Component {
       let buildPath = new paper.Path.Rectangle({
         x: 0, 
         y: 0,
-        width: this.state.sizeMyHome[0] * this.state.squareSize,
-        height: this.state.sizeMyHome[1] * this.state.squareSize
+        //!!!width: setting.sizeMyHome[0] * this.state.squareSize,
+        //height: setting.sizeMyHome[1] * this.state.squareSize
       });
-      buildPath.fillColor = '#ff84af';
-		  buildPath.strokeColor = '#00baff';
+      //buildPath.fillColor = '#ff84af';
+		  //buildPath.strokeColor = '#00baff';
 
       let deletBtnBg = new paper.Path.Circle({
-        center: [this.state.sizeMyHome[0] * this.state.squareSize, 0], 
+        //center: [this.state.sizeMyHome[0] * this.state.squareSize, 0], 
         radius: this.state.squareSize * 0.8
       });
       deletBtnBg.fillColor = '#555';
@@ -209,97 +237,110 @@ class App extends React.Component {
       }
       buildTool.onMouseUp = (e) => {
         if (isEdit) {
-          itemSet.position.x = e.point.x - (e.point.x - this.state.mapPadding - (this.state.sizeMyHome[0] * this.state.squareSize / 2 + this.state.squareSize * 0.4)) % this.state.squareSize;
-          itemSet.position.y = e.point.y - (e.point.y - this.state.mapPadding - (this.state.sizeMyHome[1] * this.state.squareSize / 2 + this.state.squareSize * 0.4)) % this.state.squareSize;
+          itemSet.position.x = e.point.x - (e.point.x - setting.mapPadding - (this.state.sizeMyHome[0] * this.state.squareSize / 2 + this.state.squareSize * 0.4)) % this.state.squareSize;
+          itemSet.position.y = e.point.y - (e.point.y - setting.mapPadding - (this.state.sizeMyHome[1] * this.state.squareSize / 2 + this.state.squareSize * 0.4)) % this.state.squareSize;
         }
-        
-      }
+      }*/
     }
   }
+  renderGrid() {
+    const gridLayer = new paper.Layer();
+    gridLayer.activate();
+    let gridLine;
+    const dashStroke = [this.state.squareSize + 5, this.state.squareSize - 2]
+    for(let x = 0; x <= setting.squarePerBlock * setting.mapXBlock; x++) {
+      if (x % setting.squarePerBlock === 0) {
+        gridLine = new paper.Path.Line(new paper.Point(x * this.state.squareSize + setting.mapPadding - 0.5, 0), new paper.Point(x * this.state.squareSize + setting.mapPadding - 0.5, this.state.canvasSizeY));
+        gridLine.strokeWidth = 3;
+        gridLine.dashArray = dashStroke;
+        gridLine.strokeColor = setting.colorMainGrid;
+      }
+      else {
+        gridLine = new paper.Path.Line(new paper.Point(x * this.state.squareSize + setting.mapPadding - 0.5, setting.mapPadding), new paper.Point(x * this.state.squareSize + setting.mapPadding - 0.5, this.state.canvasSizeY - setting.mapPadding));
+        gridLine.strokeColor = setting.colorGrid;
+      }
+      gridLine.locked = true;
+    }
+    for(let y = 0; y <= setting.squarePerBlock * setting.mapYBlock; y++) {
+      if (y % setting.squarePerBlock === 0) {
+        gridLine = new paper.Path.Line(new paper.Point(0, y * this.state.squareSize + setting.mapPadding - 0.5), new paper.Point(this.state.canvasSizeX, y * this.state.squareSize + setting.mapPadding - 0.5));
+        gridLine.strokeWidth = 3;
+        gridLine.dashArray = dashStroke;
+        gridLine.strokeColor = setting.colorMainGrid;
+      }
+      else {
+        gridLine = new paper.Path.Line(new paper.Point(setting.mapPadding, y * this.state.squareSize + setting.mapPadding - 0.5), new paper.Point(this.state.canvasSizeX - setting.mapPadding, y * this.state.squareSize + setting.mapPadding - 0.5));
+        gridLine.strokeColor = setting.colorGrid;
+      }
+      gridLine.locked = true;
+    }
+    for (let i = 0; i < setting.mapYBlock; i++) {
+      const meridianMark = new paper.PointText(new paper.Point(setting.mapPadding / 5, this.state.squareSize * setting.squarePerBlock * (i + 0.5) + setting.mapPadding ));
+      meridianMark.fillColor = setting.colorGridMark;
+      meridianMark.fontSize = this.state.squareSize * 2;
+      meridianMark.content = String.fromCharCode(65 + i);
+      meridianMark.fontWeight = 'bold';
+    }
+    for (let j = 0; j < setting.mapXBlock; j++) {
+      let parallelMark = new paper.PointText(new paper.Point(this.state.squareSize * setting.squarePerBlock * (j + 0.5) + setting.mapPadding, this.state.squareSize * setting.squarePerBlock * setting.mapYBlock + setting.mapPadding * 1.8));
+      parallelMark.fillColor = setting.colorGridMark;
+      parallelMark.fontSize = this.state.squareSize * 2;
+      parallelMark.content = j + 1;
+      parallelMark.fontWeight = 'bold';
+    }
+  }
+  changeMode(e) {
+    const target = e.target.closest('button');
+    const currentMode = target.getAttribute('id');
+    const currentModeData = toolData.toolData.find((data) => {
+      if (data.mode === currentMode) {
+        return data;
+      }
+    });
+    let currentItem;
+    if (currentMode === 'draw') {
+      currentItem = currentModeData.colors[0].colorName;
+    }
+    else {
+      currentItem = currentModeData.tools[0].items[0].item;
+    }
+    this.setState({
+      currentMode: currentMode,
+      currentModeData: currentModeData,
+      currentTool: currentModeData.tools[0].tool,
+      currentItem: currentItem
+    });
+  }
   isEditableArea(point) {
-    if (point.x > this.state.mapPadding && point.x < this.state.squareSize * this.state.squareCount * this.state.mapHUnit + this.state.mapPadding && point.y > this.state.mapPadding && point.y < this.state.squareSize * this.state.squareCount * this.state.mapVUnit + this.state.mapPadding) {
+    if (point.x > setting.mapPadding && point.x < this.state.squareSize * setting.squarePerBlock * setting.mapXBlock + setting.mapPadding && point.y > setting.mapPadding && point.y < this.state.squareSize * setting.squarePerBlock * setting.mapYBlock + setting.mapPadding) {
       return true;
     }
     else {
       return false;
     }
   }
-  startDraw(e) {
-    this.setState({
-      currentMode: 'draw'
-    });
-  }
-  startBuild(e) {
-    this.setState({
-      currentMode: 'build'
-    });
-  }
   draw(e) {
     if (this.isEditableArea(e.point)) {
       const drawRect = new paper.Path.Rectangle({
-        x: e.point.x - (e.point.x - this.state.mapPadding) % this.state.squareSize, 
-        y: e.point.y - (e.point.y - this.state.mapPadding) % this.state.squareSize,
+        x: e.point.x - (e.point.x - setting.mapPadding) % this.state.squareSize, 
+        y: e.point.y - (e.point.y - setting.mapPadding) % this.state.squareSize,
         width: this.state.squareSize,
         height: this.state.squareSize
       });
-      drawRect.fillColor = this.state.colorG1[Math.floor(Math.random() * this.state.colorG1.length)];
+      //!!!drawRect.fillColor = this.state.colorG1[Math.floor(Math.random() * this.state.colorG1.length)];
     }
   }
   render() {
     return (
       <div className='container'>
         <aside>
-          <div className='mainTools'>
-            <ul>
-              <li>
-                <button id='draw'>
-                  塗
-                </button>
-              </li>
-              <li>
-                <button id='build'>
-                  蓋
-                </button>
-              </li>
-              <li>
-                <button id='grow'>
-                  種
-                </button>
-              </li>
-            </ul>
+          <div className='modes'>
+            <MenuModes toolData={toolData.toolData} currentMode = {this.state.currentMode} onClick={this.changeMode} />
           </div>
           
-          <div className='subTools'>
-            <ul>
-              <li>
-                <button id='colorG1' onClick={(e) => this.startDraw(e)}>
-                  G1
-                </button>
-              </li>
-              <li>
-                <button id='sizeMyHome' onClick={(e) => this.startBuild(e)}>
-                  My Home
-                </button> 
-              </li>
-            </ul>
-            <hr />
-            <ul>
-              <li>
-                <button id=''>
-                  塗
-                </button>
-              </li>
-              <li>
-                <button id=''>
-                  蓋
-                </button>
-              </li>
-              <li>
-                <button id=''>
-                  種
-                </button>
-              </li>
-            </ul>
+          <div className='tools'>
+            <MenuTools currentTool = {this.state.currentTool} currentModeData = {this.state.currentModeData} />
+            <MenuItems currentMode = {this.state.currentMode} currentModeData = {this.state.currentModeData} currentTool = {this.state.currentTool} currentItem = {this.state.currentItem} /> 
           </div>
         </aside>
         <canvas id='canvas'>

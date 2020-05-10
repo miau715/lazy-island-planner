@@ -1,0 +1,15 @@
+{
+  "squareSize": 8,
+  "squarePerBlock": 16,
+  "mapPadding": 50,
+  "mapXBlock": 7,
+  "mapYBlock": 6,
+  "colorBg": "rgb(119, 214, 194)",
+  "colorGrid": "rgba(255, 255, 255, 0.2)",
+  "colorMainGrid": "rgba(255, 255, 255, 0.4)",
+  "colorGridMark": "#2f9b8b",
+  "sampleStartX": 354,
+  "sampleStartY": 117,
+  "sampleEndX": 953,
+  "sampleEndY": 630
+}

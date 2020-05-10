@@ -1,0 +1,240 @@
+{
+  "toolData": [
+    {
+      "mode": "draw",
+      "image": "icon_draw.svg",
+      "tools": [
+        {
+          "tool": "brush-S",
+          "image": "icon_brush-S.svg",
+          "size": 1
+        },
+        {
+          "tool": "brush-M",
+          "image": "icon_brush-M.svg",
+          "size": 2
+        },
+        {
+          "tool": "brush-L",
+          "image": "icon_brush-L.svg",
+          "size": 3
+        },
+        {
+          "tool": "marquee",
+          "image": "icon_marquee.svg"
+        }
+      ],
+      "colors": [
+        {
+          "colorName": "colorG1",
+          "image": "icon_colorG1.jpg",
+          "color": ["#3c783b", "#598447", "#3d783c", "#417a40", "#518349"]
+        },
+        {
+          "colorName": "colorG2",
+          "image": "icon_colorG2.jpg",
+          "color": ["#42a140", "#49a646", "#40a03e", "#44a63f", "#4fa544"]
+        },
+        {
+          "colorName": "colorG3",
+          "image": "icon_colorG3.jpg",
+          "color": ["#5dc549", "#5fc647", "#5bc746", "#6ecd51", "#5cc746"]
+        },
+        {
+          "colorName": "colorSand",
+          "image": "icon_colorSand.jpg",
+          "color": ["#f0e8a7", "#ece5a2", "#ede7a6", "#ebe6a1", "#eee8b4"]
+        },
+        {
+          "colorName": "colorWater",
+          "image": "icon_colorWater.jpg",
+          "color": ["#78d4c3", "#7bd8c3", "#7dd9c0", "#79d6c1", "#76d5c3"]
+        },
+        {
+          "colorName": "colorRock",
+          "image": "icon_colorRock.jpg",
+          "color": ["#6e7484", "#818793", "#6e7689", "#6f7684", "#747788"]
+        },
+        {
+          "colorName": "colorCustom",
+          "image": "icon_palette.svg",
+          "color": ["#b0a07c"]
+        }
+      ]
+    },
+    {
+      "mode": "build",
+      "image": "icon_build.svg",
+      "tools": [
+        {
+          "tool": "building",
+          "image": "icon_building.svg",
+          "color": "#544f40",
+          "items": [
+            {
+              "item": "home",
+              "image": "icon_home.svg",
+              "size": [5, 4],
+              "color": "#f784ae"
+            },
+            {
+              "item": "house",
+              "image": "icon_house.svg",
+              "size": [4, 4],
+              "color": "#f8b616"
+            },
+            {
+              "item": "store",
+              "image": "icon_store.svg",
+              "size": [7, 4]
+            },
+            {
+              "item": "apparel",
+              "image": "icon_apparel.svg",
+              "size": [5, 4]
+            },
+            {
+              "item": "museum",
+              "image": "icon_museum.svg",
+              "size": [7, 4]
+            },
+            {
+              "item": "infoCenter",
+              "image": "icon_infoCenter.svg",
+              "size": [12, 10]
+            },
+            {
+              "item": "camp",
+              "image": "icon_camp.svg",
+              "size": [4, 4]
+            },
+            {
+              "item": "store",
+              "image": "icon_airPort.svg",
+              "size": [8, 8]
+            }
+          ]
+        },
+        {
+          "tool": "bridge",
+          "image": "icon_bridge.svg",
+          "color": "#847f64",
+          "items": [
+            {
+              "item": "b0",
+              "size": [2, 4]
+            },
+            {
+              "item": "b90",
+              "size": [4, 2]
+            },
+            {
+              "item": "b45",
+              "size": [6, 6]
+            },
+            {
+              "item": "b135",
+              "size": [6, 6]
+            }
+          ]
+        },
+        {
+          "tool": "slope",
+          "image": "icon_slope.svg",
+          "color": "#edda96",
+          "items": [
+            {
+              "item": "s0",
+              "size": [2, 4]
+            },
+            {
+              "item": "s90",
+              "size": [4, 2]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "plant",
+      "image": "icon_plant.svg",
+      "tools": [
+        {
+          "tool": "tree",
+          "image": "icon_tree.svg",
+          "color": "#034205",
+          "size": [3, 3],
+          "items": [
+            {
+              "item": "normal"
+            },
+            {
+              "item": "pine"
+            },
+            {
+              "item": "apple"
+            },
+            {
+              "item": "cherry"
+            },
+            {
+              "item": "coconut"
+            },
+            {
+              "item": "orange"
+            },
+            {
+              "item": "pear"
+            },
+            {
+              "item": "peach"
+            },
+            {
+              "item": "bamboo"
+            }
+          ]
+        },
+        {
+          "tool": "flower",
+          "image": "icon_flower.svg",
+          "color": "#fff",
+          "size": [1, 1],
+          "items": [
+            {
+              "item": "red"
+            },
+            {
+              "item": "yellow"
+            },
+            {
+              "item": "white"
+            },
+            {
+              "item": "orange"
+            },
+            {
+              "item": "pink"
+            },
+            {
+              "item": "purple"
+            },
+            {
+              "item": "black"
+            }
+          ]
+        },
+        {
+          "tool": "fence",
+          "image": "icon_fence.svg",
+          "color": "#968a75",
+          "size": [1, 1],
+          "items": [
+            {
+              "item": "normal"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
