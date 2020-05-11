@@ -291,9 +291,7 @@ class App extends React.Component {
     paper.project.layers.drawLayer.activate();
     const drawTool = new paper.Tool();
     drawTool.activate();
-    
     let size, colors;
-
     const thisTool = this.state.currentModeData.tools.find((tool) => {
       if (tool.tool === this.state.currentTool) {
         return tool;
@@ -313,21 +311,42 @@ class App extends React.Component {
     }
     const refPointDist = (size - 1) * setting.squareSize;
 
-    let brush = new paper.Path.Rectangle({
-      x: 0, 
-      y: 0,
-      width: size * this.state.squareSize,
-      height: size * this.state.squareSize
-    });
-    brush.fillColor = 'rgba(255,255,255,0.1)';
-    brush.strokeColor = 'rgba(255,255,255,0.8)';
-    brush.name = 'brush';
+    if (!paper.project.activeLayer.children.brush) {
+      let brush = new paper.Path.Rectangle({
+        x: 0, 
+        y: 0,
+        width: size * this.state.squareSize,
+        height: size * this.state.squareSize
+      });
+      brush.fillColor = 'rgba(255,255,255,0.1)';
+      brush.strokeColor = 'rgba(255,255,255,0.8)';
+      brush.name = 'brush';
+    }
+    else {
+      if (paper.project.activeLayer.children.brush.width / this.state.squareSize !== size) {
+        paper.project.activeLayer.children.brush.remove();
+        let brush = new paper.Path.Rectangle({
+          x: 0, 
+          y: 0,
+          width: size * this.state.squareSize,
+          height: size * this.state.squareSize
+        });
+        brush.fillColor = 'rgba(255,255,255,0.1)';
+        brush.strokeColor = 'rgba(255,255,255,0.8)';
+        brush.name = 'brush';
+      }
+    }
     const brushSquare = paper.project.activeLayer.children.brush;
+    console.log(paper.project.activeLayer.children.brush);
     drawTool.onMouseMove = (e) => {
-      brushSquare.position = e.point;
+      let point = new paper.Point();
+      point.x = e.point.x - (e.point.x - setting.mapPadding) % this.state.squareSize - refPointDist + this.state.squareSize * size / 2;
+      point.y = e.point.y - (e.point.y - setting.mapPadding) % this.state.squareSize - refPointDist + this.state.squareSize * size / 2;
+      brushSquare.position = point;
     }
 
     drawTool.onMouseDown = (e) => {
+      console.log(paper.project.activeLayer.children.brush);
       if (this.isEditableArea(e.point)) {
         this.draw(e, size, refPointDist, colors);
       }
@@ -343,7 +362,6 @@ class App extends React.Component {
     let point = new paper.Point(0, 0);
     let testPoint = new paper.Point(0, 0);
     const brushSquare = paper.project.activeLayer.children.brush;
-    console.log(brushSquare);
     point.x = e.point.x - (e.point.x - setting.mapPadding) % this.state.squareSize - refPointDist;
     point.y = e.point.y - (e.point.y - setting.mapPadding) % this.state.squareSize - refPointDist;
     for (let i = 0; i < size; i++) {
@@ -355,8 +373,8 @@ class App extends React.Component {
           height: this.state.squareSize
         });
         brushSquare.position = [point.x + size * this.state.squareSize / 2, point.y + size * this.state.squareSize / 2];
-        testPoint.x = point.x + i * this.state.squareSize + this.state.squareSize/2;
-        testPoint.y = point.y + j * this.state.squareSize + this.state.squareSize/2;
+        testPoint.x = point.x + i * this.state.squareSize + this.state.squareSize / 2;
+        testPoint.y = point.y + j * this.state.squareSize + this.state.squareSize / 2;
         let hitResult = paper.project.layers[2].hitTest(testPoint, {            
           fill: true
         });
@@ -392,7 +410,7 @@ class App extends React.Component {
       height: size[1] * this.state.squareSize
     });
     buildPath.fillColor = thisItem.color ? thisItem.color : thisTool.color;
-    buildPath.strokeColor = '#00baff';
+    buildPath.strokeColor = setting.strokeColorBilding;
     let deletBtnBg = new paper.Path.Circle({
       center: [size[0] * this.state.squareSize, 0], 
       radius: this.state.squareSize * 0.8
@@ -416,7 +434,6 @@ class App extends React.Component {
         itemSet.position.y = e.point.y - (e.point.y - setting.mapPadding - (size[1] * this.state.squareSize / 2 + this.state.squareSize * 0.4)) % this.state.squareSize;
         isBuild = false;
         itemSet.data.built = true;
-        console.log(itemSet);
       }
       else {
         const hitResult = paper.project.layers.buildLayer.hitTest(e.point, {
