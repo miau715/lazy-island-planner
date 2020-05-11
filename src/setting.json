@@ -13,5 +13,6 @@
   "sampleEndX": 953,
   "sampleEndY": 630,
   "hideDist": 500,
-  "strokeColorBilding": "#00baff"
+  "strokeColorBilding": "#00baff",
+  "strokeColorPlant": "#00ff48"
 }

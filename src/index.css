@@ -150,6 +150,10 @@ aside button.tree img {
   height: 20px;
 }
 
+aside button.flower {
+  background: transparent;
+}
+
 aside button .colorBlock {
   width: 40px;
   height: 40px;

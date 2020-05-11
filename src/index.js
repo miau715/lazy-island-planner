@@ -69,7 +69,7 @@ function MenuBtn(props) {
     }
     const colorStyle = {background: color};
     return (
-      <button id={props.data.mode} onClick={props.onClick} className={className}>
+      <button id={id} onClick={props.onClick} className={className}>
         <div className="colorBlock" style={colorStyle}></div>
       </button>
     )
@@ -190,9 +190,8 @@ class App extends React.Component {
     if (this.state.currentMode === 'draw') {
       this.handleDraw();
     }
-    else if (this.state.currentMode === 'build' && this.state.currentItem) {
+    else if ((this.state.currentMode === 'build' || this.state.currentMode === 'plant') && this.state.currentItem) {
       this.handleBuildAndPlant();
-      
     }
   }
   renderGrid() {
@@ -407,8 +406,10 @@ class App extends React.Component {
     let size;
     let isBuild = true;
     let isEdit = false;
+    let buildPath
+    const currentTool = this.state.currentTool;
     const thisTool = this.state.currentModeData.tools.find((tool) => {
-      if (tool.tool === this.state.currentTool) {
+      if (tool.tool === currentTool) {
         return tool;
       }
     });
@@ -417,22 +418,40 @@ class App extends React.Component {
         return item;
       }
     });
-    size = thisItem.size;
+    if (this.state.currentMode === 'build') {
+      size = thisItem.size;
 
-    let buildPath = new paper.Shape.Rectangle({
-      x: 0, 
-      y: 0,
-      width: size[0] * this.state.squareSize,
-      height: size[1] * this.state.squareSize
-    });
+      buildPath = new paper.Shape.Rectangle({
+        x: 0, 
+        y: 0,
+        width: size[0] * this.state.squareSize,
+        height: size[1] * this.state.squareSize
+      });
 
-    // oblique bridge
-    if (this.state.currentItem === 'b45' || this.state.currentItem === 'b135') {
-      buildPath.size = [2 * this.state.squareSize, 4 * this.state.squareSize];
-      buildPath.rotate(parseInt(this.state.currentItem.replace('b', '')));
+      // oblique bridge
+      if (this.state.currentItem === 'b45' || this.state.currentItem === 'b135') {
+        buildPath.size = [2 * this.state.squareSize, 4 * this.state.squareSize];
+        buildPath.rotate(parseInt(this.state.currentItem.replace('b', '')));
+      }
+      buildPath.fillColor = thisItem.color ? thisItem.color : thisTool.color;
+      buildPath.strokeColor = setting.strokeColorBilding;
     }
-    buildPath.fillColor = thisItem.color ? thisItem.color : thisTool.color;
-    buildPath.strokeColor = setting.strokeColorBilding;
+    else if (this.state.currentMode === 'plant') {
+      size = thisTool.size;
+      if (this.state.currentTool === 'tree') {
+        buildPath = new paper.Shape.Circle(new paper.Point(0, 0), size[0] * this.state.squareSize * 0.7 / 2);
+        buildPath.position.x = this.state.squareSize * 1.7;
+        buildPath.position.y = this.state.squareSize * 1.2;
+        buildPath.fillColor = thisItem.color ? thisItem.color : thisTool.color;
+        buildPath.strokeColor = setting.strokeColorPlant;
+        buildPath.opacity = 0.5;
+      }
+      else if (this.state.currentTool === 'flower') {
+        buildPath = new paper.Shape.Circle(new paper.Point(size[0] * this.state.squareSize / 2, size[0] * this.state.squareSize / 2), size[0] * this.state.squareSize / 2);
+        buildPath.fillColor = thisItem.item;
+        buildPath.strokeColor = setting.strokeColorPlant;
+      }
+    }
     let deletBtnBg = new paper.Path.Circle({
       center: [size[0] * this.state.squareSize, 0], 
       radius: this.state.squareSize * 0.8
@@ -441,8 +460,10 @@ class App extends React.Component {
     if (thisItem.image) {
       const buildImage = new paper.Raster(thisItem.image);
       const squareSize = this.state.squareSize;
+      
+      const imageSizeSquare = currentTool === 'tree' ? 1 : 2.8;
       buildImage.onLoad = function() {
-        buildImage.size = new paper.Size(buildImage.width * squareSize * 2.8 / buildImage.height, squareSize * 2.8);
+        buildImage.size = new paper.Size(buildImage.width * squareSize * imageSizeSquare / buildImage.height, squareSize * imageSizeSquare);
         buildImage.position = buildItem.position;
         buildImage.locked = true;
         buildItem.addChild(buildImage);
@@ -475,7 +496,7 @@ class App extends React.Component {
           segments: true,
           stroke: true,
           fill: true,
-          tolerance: 5
+          tolerance: 1
         });
         if (!hitResult) {
           isEdit = false;
