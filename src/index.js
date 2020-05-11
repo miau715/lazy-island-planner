@@ -124,11 +124,14 @@ function MenuItems(props) {
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.upLoadImg = this.upLoadImg.bind(this);
+    this.useDefaultMap = this.useDefaultMap.bind(this);
     this.changeMode = this.changeMode.bind(this);
     this.changeTool = this.changeTool.bind(this);
     this.changeItem = this.changeItem.bind(this);
     this.changeColor = this.changeColor.bind(this);
     this.state = {
+      isImgUploaded: false,
       canvasSizeX: setting.squareSize * setting.squarePerBlock * setting.mapXBlock + setting.mapPadding * 2,
       canvasSizeY: setting.squareSize * setting.squarePerBlock * setting.mapYBlock + setting.mapPadding * 2,
       squareSize: setting.squareSize,
@@ -139,13 +142,54 @@ class App extends React.Component {
       customColor: toolData.toolData[0].colors[toolData.toolData[0].colors.length - 1].color[0]
     };
   }
-  componentDidMount() {
+  componentDidUpdate(prevProps) {
+    console.log(this.state.currentMode);
+    if (paper.project) {
+      if (this.state.currentMode === 'draw') {
+        this.handleDraw();
+      }
+      else if ((this.state.currentMode === 'build' || this.state.currentMode === 'plant') && this.state.currentItem) {
+        this.handleBuildAndPlant();
+      }
+    }
+  }
+  selectImg(e) {
+    const label = e.target.nextElementSibling;
+    const labelVal = label.innerHTML;
+		let fileName = '';
+		fileName = e.target.value.split('\\').pop();
+		if (fileName) {
+      label.innerHTML = fileName;
+    }
+		else {
+      label.innerHTML = labelVal;
+    }
+  }
+  upLoadImg() {
+    const uploadImg = document.getElementById('img-input').files[0];
+    const reader = new FileReader();
+    const that = this;
+    reader.addEventListener("load", function () {
+      that.setState({
+        isImgUploaded: true
+      });
+      that.renderMap(reader.result);
+    }, false);
+    if (uploadImg) {
+      reader.readAsDataURL(uploadImg);
+    }
+  }
+  useDefaultMap() {
+    this.setState({
+      isImgUploaded: true
+    });
+    this.renderMap('test.jpg');
+  }
+  renderMap(url) {
     const canvas = document.getElementById('canvas');
     canvas.width = this.state.canvasSizeX;
     canvas.height = this.state.canvasSizeY;
     paper.setup(canvas);
-
-    const url = 'test.jpg';
     let raster = new paper.Raster(url);
     const mapLayer = new paper.Layer();
     mapLayer.name = 'mapLayer';
@@ -157,8 +201,8 @@ class App extends React.Component {
     const bgRect = new paper.Shape.Rectangle({
       x: 0,
       y: 0,
-      width: canvas.width,
-      height: canvas.height,
+      width: this.state.canvasSizeX,
+      height: this.state.canvasSizeY,
     });
     bgRect.fillColor = setting.colorBg;
     raster.onLoad = () => {
@@ -184,15 +228,6 @@ class App extends React.Component {
     }
     this.renderGrid();
     this.componentDidUpdate();
-  }
-  componentDidUpdate(prevProps) {
-    console.log(this.state.currentMode);
-    if (this.state.currentMode === 'draw') {
-      this.handleDraw();
-    }
-    else if ((this.state.currentMode === 'build' || this.state.currentMode === 'plant') && this.state.currentItem) {
-      this.handleBuildAndPlant();
-    }
   }
   renderGrid() {
     const gridLayer = new paper.Layer();
@@ -548,22 +583,40 @@ class App extends React.Component {
     }
   }
   render() {
-    return (
-      <div className='container'>
-        <aside>
-          <div className='modes'>
-            <MenuModes toolData={toolData.toolData} currentMode = {this.state.currentMode} onClick={this.changeMode} />
-          </div>
-          
-          <div className='tools'>
-            <MenuTools currentTool={this.state.currentTool} currentModeData={this.state.currentModeData} onClick={this.changeTool} />
-            <MenuItems currentMode={this.state.currentMode} currentModeData={this.state.currentModeData} currentTool={this.state.currentTool} currentItem={this.state.currentItem} onClick={this.changeItem} customColor={this.state.customColor} changeColor={this.changeColor} /> 
-          </div>
-        </aside>
-        <canvas id='canvas'>
-        </canvas>
-      </div>
-    );
+    if (!this.state.isImgUploaded) {
+      return (
+        <div className='intro'>
+          <h1><div>Lazy Island Planner</div></h1>
+          <p>這是一個給懶人用的《集合啦！動物森友會》島嶼規劃工具。</p>
+          <p>上傳你擷取的島嶼地圖畫面（如下圖）即可開始，或<button className='link' onClick={this.useDefaultMap}>先用我的地圖試試看</button>。</p>
+          <img src='test.jpg' alt='上傳圖示意圖' className='island-map' />
+          <form>
+            <input type='file' accept='image/*' id='img-input' onChange={this.selectImg} />
+            <label for='img-input' className='fake-input'>選擇檔案</label>
+            <div id='error-message'></div>
+            <button type='button' className='btn-upload' onClick={this.upLoadImg}>上傳</button>
+          </form>
+        </div>
+      )
+    }
+    else {
+      return (
+        <div className='editor'>
+          <aside>
+            <div className='modes'>
+              <MenuModes toolData={toolData.toolData} currentMode = {this.state.currentMode} onClick={this.changeMode} />
+            </div>
+            
+            <div className='tools'>
+              <MenuTools currentTool={this.state.currentTool} currentModeData={this.state.currentModeData} onClick={this.changeTool} />
+              <MenuItems currentMode={this.state.currentMode} currentModeData={this.state.currentModeData} currentTool={this.state.currentTool} currentItem={this.state.currentItem} onClick={this.changeItem} customColor={this.state.customColor} changeColor={this.changeColor} /> 
+            </div>
+          </aside>
+          <canvas id='canvas'>
+          </canvas>
+        </div>
+      );
+    }
   }
 }
 
