@@ -168,35 +168,44 @@
         {
           "tool": "tree",
           "image": "icon_tree.svg",
-          "color": "#034205",
+          "color": "#00b27a",
           "size": [3, 3],
           "items": [
             {
               "item": "broadleaf"
             },
             {
-              "item": "conifer"
+              "item": "conifer",
+              "color": "#12560c"
             },
             {
-              "item": "apple"
+              "item": "apple",
+              "image": "icon_apple.svg"
             },
             {
-              "item": "cherry"
+              "item": "cherry",
+              "image": "icon_cherry.svg"
             },
             {
-              "item": "coconut"
+              "item": "coconut",
+              "image": "icon_coconut.svg"
             },
             {
-              "item": "orange"
+              "item": "orange",
+              "image": "icon_orange.svg"
             },
             {
-              "item": "pear"
+              "item": "pear",
+              "image": "icon_pear.svg"
             },
             {
-              "item": "peach"
+              "item": "peach",
+              "image": "icon_peach.svg"
             },
             {
-              "item": "bamboo"
+              "item": "bamboo",
+              "image": "icon_bamboo.svg",
+              "color": "#c7ea7b"
             }
           ]
         },

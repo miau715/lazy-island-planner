@@ -42,15 +42,32 @@ function MenuBtn(props) {
       )
     }
     else {
-      return (
-        <button id={id} onClick={props.onClick} className={className}>
-          <img alt={id} src={props.data.image} />
-        </button>
-      )
+      if (props.type === 'tree') {
+        const colorStyle = {background: props.data.color};
+        return (
+          <button id={id} onClick={props.onClick} className={className} style={colorStyle}>
+            <img alt={id} src={props.data.image} />
+          </button>
+        )
+      }
+      else {
+        return (
+          <button id={id} onClick={props.onClick} className={className}>
+            <img alt={id} src={props.data.image} />
+          </button>
+        )
+      }
     }
   }
   else {
-    const colorStyle = {color: props.data.item};
+    let color;
+    if (props.type === 'flower') {
+      color = props.data.item;
+    }
+    else {
+      color = props.data.color;
+    }
+    const colorStyle = {background: color};
     return (
       <button id={props.data.mode} onClick={props.onClick} className={className}>
         <div className="colorBlock" style={colorStyle}></div>
@@ -137,7 +154,7 @@ class App extends React.Component {
     const buildLayer = new paper.Layer();
     buildLayer.name = 'buildLayer';
     mapLayer.activate();
-    const bgRect = new paper.Path.Rectangle({
+    const bgRect = new paper.Shape.Rectangle({
       x: 0,
       y: 0,
       width: canvas.width,
@@ -155,7 +172,7 @@ class App extends React.Component {
       for (let y = 0; y < mapRaster.height; y++) {
         for(let x = 0; x < mapRaster.width; x++) {
           const color = mapRaster.getPixel(x, y);
-          const pixelRect = new paper.Path.Rectangle({
+          const pixelRect = new paper.Shape.Rectangle({
             x: x * this.state.squareSize + setting.mapPadding, 
             y: y * this.state.squareSize + setting.mapPadding,
             width: this.state.squareSize,
@@ -246,6 +263,7 @@ class App extends React.Component {
       currentTool: currentModeData.tools[0].tool,
       currentItem: currentItem
     });
+    this.clearBrushHover();
     this.clearNotBuiltItem();
   }
   changeTool(e) {
@@ -312,9 +330,9 @@ class App extends React.Component {
     const refPointDist = (size - 1) * setting.squareSize;
 
     if (!paper.project.activeLayer.children.brush) {
-      let brush = new paper.Path.Rectangle({
-        x: 0, 
-        y: 0,
+      let brush = new paper.Shape.Rectangle({
+        x: setting.hideDist * -1, 
+        y: setting.hideDist * -1,
         width: size * this.state.squareSize,
         height: size * this.state.squareSize
       });
@@ -325,9 +343,9 @@ class App extends React.Component {
     else {
       if (paper.project.activeLayer.children.brush.width / this.state.squareSize !== size) {
         paper.project.activeLayer.children.brush.remove();
-        let brush = new paper.Path.Rectangle({
-          x: 0, 
-          y: 0,
+        let brush = new paper.Shape.Rectangle({
+          x: setting.hideDist * -1, 
+          y: setting.hideDist * -1,
           width: size * this.state.squareSize,
           height: size * this.state.squareSize
         });
@@ -337,16 +355,13 @@ class App extends React.Component {
       }
     }
     const brushSquare = paper.project.activeLayer.children.brush;
-    console.log(paper.project.activeLayer.children.brush);
     drawTool.onMouseMove = (e) => {
       let point = new paper.Point();
       point.x = e.point.x - (e.point.x - setting.mapPadding) % this.state.squareSize - refPointDist + this.state.squareSize * size / 2;
       point.y = e.point.y - (e.point.y - setting.mapPadding) % this.state.squareSize - refPointDist + this.state.squareSize * size / 2;
       brushSquare.position = point;
     }
-
     drawTool.onMouseDown = (e) => {
-      console.log(paper.project.activeLayer.children.brush);
       if (this.isEditableArea(e.point)) {
         this.draw(e, size, refPointDist, colors);
       }
@@ -366,7 +381,7 @@ class App extends React.Component {
     point.y = e.point.y - (e.point.y - setting.mapPadding) % this.state.squareSize - refPointDist;
     for (let i = 0; i < size; i++) {
       for (let j = 0; j < size; j++) {
-        const drawRect = new paper.Path.Rectangle({
+        const drawRect = new paper.Shape.Rectangle({
           x: point.x + i * this.state.squareSize, 
           y: point.y + j * this.state.squareSize,
           width: this.state.squareSize,
@@ -403,35 +418,55 @@ class App extends React.Component {
       }
     });
     size = thisItem.size;
-    let buildPath = new paper.Path.Rectangle({
+
+    let buildPath = new paper.Shape.Rectangle({
       x: 0, 
       y: 0,
       width: size[0] * this.state.squareSize,
       height: size[1] * this.state.squareSize
     });
+
+    // oblique bridge
+    if (this.state.currentItem === 'b45' || this.state.currentItem === 'b135') {
+      buildPath.size = [2 * this.state.squareSize, 4 * this.state.squareSize];
+      buildPath.rotate(parseInt(this.state.currentItem.replace('b', '')));
+    }
     buildPath.fillColor = thisItem.color ? thisItem.color : thisTool.color;
     buildPath.strokeColor = setting.strokeColorBilding;
     let deletBtnBg = new paper.Path.Circle({
       center: [size[0] * this.state.squareSize, 0], 
       radius: this.state.squareSize * 0.8
     });
+    let buildItem = new paper.Group([buildPath])
+    if (thisItem.image) {
+      const buildImage = new paper.Raster(thisItem.image);
+      const squareSize = this.state.squareSize;
+      buildImage.onLoad = function() {
+        buildImage.size = new paper.Size(buildImage.width * squareSize * 2.8 / buildImage.height, squareSize * 2.8);
+        buildImage.position = buildItem.position;
+        buildImage.locked = true;
+        buildItem.addChild(buildImage);
+      };
+    }
+
     deletBtnBg.fillColor = '#555';
     let deletBtnIcon = new paper.PointText(new paper.Point(size[0] * this.state.squareSize - (this.state.squareSize * 1.6 - 6) / 2, (this.state.squareSize * 1.6 - 6) / 2));
     deletBtnIcon.fillColor = '#eee';
     deletBtnIcon.content = '×';
     let deletBtn = new paper.Group([deletBtnBg, deletBtnIcon]);
     deletBtn.name = 'deletBtn';
-    let itemSet = new paper.Group([buildPath, deletBtn]);
+    let itemSet = new paper.Group([buildItem, deletBtn]);
     itemSet.position = [setting.hideDist * -1, setting.hideDist * -1];
     buildTool.onMouseMove = (e) => {
       if (isBuild) {
-        itemSet.position = e.point;
+        itemSet.position.x = this.getSnapPoint(e.point.x, size[0]);
+        itemSet.position.y = this.getSnapPoint(e.point.y, size[1]);
       }
     }
     buildTool.onMouseDown = (e) => {
       if (isBuild) {
-        itemSet.position.x = e.point.x - (e.point.x - setting.mapPadding - (size[0] * this.state.squareSize / 2 + this.state.squareSize * 0.4)) % this.state.squareSize;
-        itemSet.position.y = e.point.y - (e.point.y - setting.mapPadding - (size[1] * this.state.squareSize / 2 + this.state.squareSize * 0.4)) % this.state.squareSize;
+        itemSet.position.x = this.getSnapPoint(e.point.x, size[0]);
+        itemSet.position.y = this.getSnapPoint(e.point.y, size[1]);
         isBuild = false;
         itemSet.data.built = true;
       }
@@ -448,7 +483,7 @@ class App extends React.Component {
         }
         else {
           if (!(hitResult.item.parent.name === 'deletBtn')) {
-            itemSet = hitResult.item.parent;
+            itemSet = hitResult.item.parent.parent;
             isEdit = true;
           }
           else {
@@ -459,13 +494,14 @@ class App extends React.Component {
     }
     buildTool.onMouseDrag = (e) => {
       if (isEdit) {
-        itemSet.position = e.point;
+        itemSet.position.x = this.getSnapPoint(e.point.x, size[0]);
+        itemSet.position.y = this.getSnapPoint(e.point.y, size[1]);
       }
     }
     buildTool.onMouseUp = (e) => {
       if (isEdit) {
-        itemSet.position.x = e.point.x - (e.point.x - setting.mapPadding - (size[0] * this.state.squareSize / 2 + this.state.squareSize * 0.4)) % this.state.squareSize;
-        itemSet.position.y = e.point.y - (e.point.y - setting.mapPadding - (size[1] * this.state.squareSize / 2 + this.state.squareSize * 0.4)) % this.state.squareSize;
+        itemSet.position.x = this.getSnapPoint(e.point.x, size[0]);
+        itemSet.position.y = this.getSnapPoint(e.point.y, size[1]);
       }
       this.setState({
         currentItem: null
@@ -473,6 +509,15 @@ class App extends React.Component {
       document.querySelectorAll('button.item').forEach(function(btn){
         btn.blur();
       });
+    }
+  }
+  getSnapPoint(point, size) {
+    const snapPoint = point - (point - setting.mapPadding - (size * this.state.squareSize / 2 + this.state.squareSize * 0.4)) % this.state.squareSize;
+    return snapPoint;
+  }
+  clearBrushHover() {
+    if (paper.project.layers.drawLayer.children.brush) {
+      paper.project.layers.drawLayer.children.brush.remove();
     }
   }
   clearNotBuiltItem() {

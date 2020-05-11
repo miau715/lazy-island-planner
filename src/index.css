@@ -141,6 +141,22 @@ aside button.slope {
   background: #468045;
 }
 
+aside button.tree {
+  background: #00b27a;
+}
+
+aside button.tree img {
+  width: 20px;
+  height: 20px;
+}
+
+aside button .colorBlock {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #00b27a;
+}
+
 canvas {
   display: block;
 }
