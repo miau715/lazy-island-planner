@@ -246,6 +246,7 @@ class App extends React.Component {
       currentTool: currentModeData.tools[0].tool,
       currentItem: currentItem
     });
+    this.clearNotBuiltItem();
   }
   changeTool(e) {
     const target = e.target.closest('button');
@@ -263,6 +264,7 @@ class App extends React.Component {
       currentTool: currentTool,
       currentItem: currentItem
     });
+    this.clearNotBuiltItem();
   }
   changeItem(e) {
     const target = e.target.closest('button');
@@ -270,17 +272,7 @@ class App extends React.Component {
     this.setState({
       currentItem: currentItem
     });
-
-    // remove not built items
-    const checkPoint = new paper.Point(this.state.squareSize / 2 - setting.hideDist, this.state.squareSize / 2 - setting.hideDist);
-    const hitResult = paper.project.layers.buildLayer.hitTest(checkPoint, {
-      segments: true,
-      stroke: true,
-      fill: true
-    });
-    if (hitResult) {
-      hitResult.item.parent.remove();
-    }
+    this.clearNotBuiltItem();
   }
   changeColor(e) {
     this.setState({
@@ -300,23 +292,8 @@ class App extends React.Component {
     const drawTool = new paper.Tool();
     drawTool.activate();
     
-    drawTool.onMouseDown = (e) => {
-      if (this.isEditableArea(e.point)) {
-        this.draw(e);
-      }
-    }
-    drawTool.onMouseDrag = (e) => {
-      if (this.isEditableArea(e.point)) {
-        this.draw(e);
-      }
-    }
-  }
-  draw(e) {
-    paper.project.layers.drawLayer.activate();
-    // get color data 
     let size, colors;
-    let point = new paper.Point(0, 0);
-    let testPoint = new paper.Point(0, 0);
+
     const thisTool = this.state.currentModeData.tools.find((tool) => {
       if (tool.tool === this.state.currentTool) {
         return tool;
@@ -336,54 +313,60 @@ class App extends React.Component {
     }
     const refPointDist = (size - 1) * setting.squareSize;
 
-    point.x = e.point.x - (e.point.x - setting.mapPadding) % setting.squareSize - refPointDist;
-    point.y = e.point.y - (e.point.y - setting.mapPadding) % setting.squareSize - refPointDist;
+    let brush = new paper.Path.Rectangle({
+      x: 0, 
+      y: 0,
+      width: size * this.state.squareSize,
+      height: size * this.state.squareSize
+    });
+    brush.fillColor = 'rgba(255,255,255,0.1)';
+    brush.strokeColor = 'rgba(255,255,255,0.8)';
+    brush.name = 'brush';
+    const brushSquare = paper.project.activeLayer.children.brush;
+    drawTool.onMouseMove = (e) => {
+      brushSquare.position = e.point;
+    }
+
+    drawTool.onMouseDown = (e) => {
+      if (this.isEditableArea(e.point)) {
+        this.draw(e, size, refPointDist, colors);
+      }
+    }
+    drawTool.onMouseDrag = (e) => {
+      if (this.isEditableArea(e.point)) {
+        this.draw(e, size, refPointDist, colors);
+      }
+    }
+  }
+  draw(e, size, refPointDist, colors) {
+    paper.project.layers.drawLayer.activate();
+    let point = new paper.Point(0, 0);
+    let testPoint = new paper.Point(0, 0);
+    const brushSquare = paper.project.activeLayer.children.brush;
+    console.log(brushSquare);
+    point.x = e.point.x - (e.point.x - setting.mapPadding) % this.state.squareSize - refPointDist;
+    point.y = e.point.y - (e.point.y - setting.mapPadding) % this.state.squareSize - refPointDist;
     for (let i = 0; i < size; i++) {
       for (let j = 0; j < size; j++) {
         const drawRect = new paper.Path.Rectangle({
-          x: point.x + i * setting.squareSize, 
-          y: point.y + j * setting.squareSize,
-          width: setting.squareSize,
-          height: setting.squareSize
+          x: point.x + i * this.state.squareSize, 
+          y: point.y + j * this.state.squareSize,
+          width: this.state.squareSize,
+          height: this.state.squareSize
         });
-        testPoint.x = point.x + i * setting.squareSize + setting.squareSize/2;
-        testPoint.y = point.y + j * setting.squareSize + setting.squareSize/2;
+        brushSquare.position = [point.x + size * this.state.squareSize / 2, point.y + size * this.state.squareSize / 2];
+        testPoint.x = point.x + i * this.state.squareSize + this.state.squareSize/2;
+        testPoint.y = point.y + j * this.state.squareSize + this.state.squareSize/2;
         let hitResult = paper.project.layers[2].hitTest(testPoint, {            
           fill: true
         });
-        if (hitResult) {
+        if (hitResult && hitResult.item.name !== 'brush') {
           hitResult.item.remove();
         }
         drawRect.fillColor = colors[Math.floor(Math.random() * colors.length)];
       }
     }
   }
-  /*drawHover(e) {
-    paper.project.layers.hoverLayer.activate();
-    let size;
-    let hasHoverBlock = false;
-    console.log(paper.project.activeLayer._children.length);
-    const thisTool = this.state.currentModeData.tools.find((tool) => {
-      if (tool.tool === this.state.currentTool) {
-        return tool;
-      }
-    });
-    size = thisTool.size ? thisTool.size : 0;
-    const refPointDist = (size - 1) * setting.squareSize;
-    if (paper.project.activeLayer._children.length == 0) {
-      const drawRect = new paper.Path.Rectangle({
-        x: 0, 
-        y: 0,
-        width: setting.squareSize,
-        height: setting.squareSize
-      });
-      drawRect.strokeColor = 'rgba(255,255,255,0.8)';
-      drawRect.name = 'hoverBlock';
-    }
-    const hoverBlock = paper.project.activeLayer.children.hoverBlock;
-    hoverBlock.position.x = e.point.x - (e.point.x - setting.mapPadding) % setting.squareSize - refPointDist;
-    hoverBlock.position.y = e.point.y - (e.point.y - setting.mapPadding) % setting.squareSize - refPointDist;
-  }*/
   handleBuildAndPlant() {
     paper.project.layers.buildLayer.activate();
     const buildTool = new paper.Tool();
@@ -432,6 +415,8 @@ class App extends React.Component {
         itemSet.position.x = e.point.x - (e.point.x - setting.mapPadding - (size[0] * this.state.squareSize / 2 + this.state.squareSize * 0.4)) % this.state.squareSize;
         itemSet.position.y = e.point.y - (e.point.y - setting.mapPadding - (size[1] * this.state.squareSize / 2 + this.state.squareSize * 0.4)) % this.state.squareSize;
         isBuild = false;
+        itemSet.data.built = true;
+        console.log(itemSet);
       }
       else {
         const hitResult = paper.project.layers.buildLayer.hitTest(e.point, {
@@ -471,6 +456,12 @@ class App extends React.Component {
       document.querySelectorAll('button.item').forEach(function(btn){
         btn.blur();
       });
+    }
+  }
+  clearNotBuiltItem() {
+    const lastBuild = paper.project.layers.buildLayer.children[paper.project.layers.buildLayer.children.length - 1];
+    if (lastBuild && !lastBuild.data.built) {
+      lastBuild.remove();
     }
   }
   render() {
