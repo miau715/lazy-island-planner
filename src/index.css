@@ -22,6 +22,9 @@ h1 {
   align-items: flex-start;
   justify-content: center;
   margin: 50px 0 0;
+  padding-bottom: 8px;
+  background: url("/bg_titleback_l.svg") calc(50% - 190px) bottom no-repeat, url("/bg_titleback_r.svg") calc(50% + 190px) bottom no-repeat;
+  background-size: 64px 50px;
 }
 
 h1::before, h1::after {
@@ -29,21 +32,22 @@ h1::before, h1::after {
   display: block;
   background-image: url("/bg_title_l.svg");
   background-repeat: no-repeat;
-  width: 84px;
-  height: 67px;
+  width: 66px;
+  height: 58px;
   position: relative;
   left: 10px;
 }
 
 h1::after {
   background-image: url("/bg_title_r.svg");
-  left: 0;
+  left: auto;
   right: 10px;
 }
 
 h1 div {
   background: #feea49;
-  padding: 10px 0;
+  height: 58px;
+  line-height: 58px;
   position: relative;
   z-index: 10;
 }
