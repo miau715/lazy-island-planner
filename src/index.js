@@ -237,6 +237,9 @@ class App extends React.Component {
     }
   }
   handleDraw() {
+    paper.project.layers.buildLayer.children.forEach((itemSet)=>{
+      itemSet.children.deletBtn.opacity = 0;
+    });
     paper.project.layers.drawLayer.activate();
     const drawTool = new paper.Tool();
     drawTool.activate();
@@ -430,7 +433,6 @@ class App extends React.Component {
       }
     }
     buildTool.onMouseDown = (e) => {
-      
       if (isBuild) {
         itemSet.position.x = this.getSnapPoint(e.point.x, true, itemSet);
         itemSet.position.y = this.getSnapPoint(e.point.y, false, itemSet);
