@@ -18,10 +18,6 @@
           "tool": "brush-L",
           "image": "icon_brush-L.svg",
           "size": 3
-        },
-        {
-          "tool": "marquee",
-          "image": "icon_marquee.svg"
         }
       ],
       "colors": [
@@ -235,17 +231,6 @@
             },
             {
               "item": "black"
-            }
-          ]
-        },
-        {
-          "tool": "fence",
-          "image": "icon_fence.svg",
-          "color": "#968a75",
-          "size": [1, 1],
-          "items": [
-            {
-              "item": "fence"
             }
           ]
         }
