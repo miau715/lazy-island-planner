@@ -11,6 +11,8 @@ import './index.css';
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.canvas = React.createRef();
+    this.fileInput = React.createRef();
     this.upLoadImg = this.upLoadImg.bind(this);
     this.useDefaultMap = this.useDefaultMap.bind(this);
     this.changeMode = this.changeMode.bind(this);
@@ -52,7 +54,7 @@ class App extends React.Component {
     }
   }
   upLoadImg() {
-    const uploadImg = document.getElementById('img-input').files[0];
+    const uploadImg = this.fileInput.current.files[0];
     const reader = new FileReader();
     const that = this;
     reader.addEventListener("load", function () {
@@ -83,7 +85,7 @@ class App extends React.Component {
     });
   }
   renderMap(url) {
-    const canvas = document.getElementById('canvas');
+    const canvas = this.canvas.current;
     canvas.width = this.state.canvasSizeX;
     canvas.height = this.state.canvasSizeY;
     paper.setup(canvas);
@@ -509,7 +511,7 @@ class App extends React.Component {
           <p>上傳你擷取的島嶼地圖畫面（如下圖）即可開始，或<button className='link' onClick={this.useDefaultMap}>先用我的地圖試試看</button>。</p>
           <img src='test.jpg' alt='上傳圖示意圖' className='island-map' />
           <form>
-            <input type='file' accept='image/*' id='img-input' onChange={this.selectImg} />
+            <input type='file' ref={this.fileInput} accept='image/*' id='img-input' onChange={this.selectImg} />
             <label for='img-input' className='fake-input'>選擇檔案</label>
             <div id='error-message'></div>
             <button type='button' className='btn-upload' onClick={this.upLoadImg}>上傳</button>
@@ -530,7 +532,7 @@ class App extends React.Component {
               <MenuItems currentMode={this.state.currentMode} currentModeData={this.state.currentModeData} currentTool={this.state.currentTool} currentItem={this.state.currentItem} onClick={this.changeItem} customColor={this.state.customColor} changeColor={this.changeColor} /> 
             </div>
           </aside>
-          <canvas id='canvas'>
+          <canvas id='canvas' ref={this.canvas}>
           </canvas>
         </div>
       );
