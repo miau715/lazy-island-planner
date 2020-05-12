@@ -143,7 +143,6 @@ class App extends React.Component {
     };
   }
   componentDidUpdate(prevProps) {
-    console.log(this.state.currentMode);
     if (paper.project) {
       if (this.state.currentMode === 'draw') {
         this.handleDraw();
@@ -180,10 +179,22 @@ class App extends React.Component {
     }
   }
   useDefaultMap() {
-    this.setState({
-      isImgUploaded: true
+    console.log('here');
+    const that = this;
+    fetch('test.jpg')
+    .then(function(response) {
+      return response.blob()
+    })
+    .then(function(blob) {
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.addEventListener("load", function () {
+        that.setState({
+          isImgUploaded: true
+        });
+        that.renderMap(reader.result);
+      }, false);
     });
-    this.renderMap('test.jpg');
   }
   renderMap(url) {
     const canvas = document.getElementById('canvas');
