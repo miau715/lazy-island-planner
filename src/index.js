@@ -452,7 +452,9 @@ class App extends React.Component {
     let size;
     let isBuild = true;
     let isEdit = false;
-    let buildPath
+    let buildPath;
+    let baseBlock;
+    let buildItem;
     const currentTool = this.state.currentTool;
     const thisTool = this.state.currentModeData.tools.find((tool) => {
       if (tool.tool === currentTool) {
@@ -481,29 +483,34 @@ class App extends React.Component {
       }
       buildPath.fillColor = thisItem.color ? thisItem.color : thisTool.color;
       buildPath.strokeColor = setting.strokeColorBilding;
+      buildItem = new paper.Group([buildPath]);
     }
     else if (this.state.currentMode === 'plant') {
       size = thisTool.size;
+      baseBlock = new paper.Shape.Rectangle({
+        x: 0, 
+        y: 0,
+        width: size[0] * this.state.squareSize,
+        height: size[1] * this.state.squareSize
+      });
+      buildItem = new paper.Group([baseBlock]);
+
       if (this.state.currentTool === 'tree') {
-        buildPath = new paper.Shape.Circle(new paper.Point(0, 0), size[0] * this.state.squareSize * 0.7 / 2);
-        buildPath.position.x = this.state.squareSize * 1.7;
-        buildPath.position.y = this.state.squareSize * 1.2;
+        buildPath = new paper.Shape.Circle(new paper.Point(size[0] * this.state.squareSize / 2, size[1] * this.state.squareSize / 2), size[0] * this.state.squareSize * 0.7 / 2);
         buildPath.fillColor = thisItem.color ? thisItem.color : thisTool.color;
         buildPath.strokeColor = setting.strokeColorPlant;
         buildPath.opacity = 0.5;
       }
       else if (this.state.currentTool === 'flower') {
-        buildPath = new paper.Shape.Circle(new paper.Point(size[0] * this.state.squareSize / 2, size[0] * this.state.squareSize / 2), size[0] * this.state.squareSize / 2);
+        buildPath = new paper.Shape.Circle(new paper.Point(size[0] * this.state.squareSize / 2, size[1] * this.state.squareSize / 2), size[0] * this.state.squareSize / 2);
         buildPath.fillColor = thisItem.item;
         buildPath.strokeColor = setting.strokeColorPlant;
       }
+      buildItem.addChild(buildPath);
     }
-    let deletBtnBg = new paper.Path.Circle({
-      center: [size[0] * this.state.squareSize, 0], 
-      radius: this.state.squareSize * 0.8
-    });
-    let buildItem = new paper.Group([buildPath])
-    if (thisItem.image) {
+    
+    // add img
+    if (thisItem.image && (thisTool.tool !== 'bridge' && thisTool.tool !== 'slope')) {
       const buildImage = new paper.Raster(thisItem.image);
       const squareSize = this.state.squareSize;
       
@@ -515,9 +522,12 @@ class App extends React.Component {
         buildItem.addChild(buildImage);
       };
     }
-
+    let deletBtnBg = new paper.Path.Circle({
+      center: [buildItem.bounds.size._width, 0], 
+      radius: this.state.squareSize * 0.8
+    });
     deletBtnBg.fillColor = '#555';
-    let deletBtnIcon = new paper.PointText(new paper.Point(size[0] * this.state.squareSize - (this.state.squareSize * 1.6 - 6) / 2, (this.state.squareSize * 1.6 - 6) / 2));
+    let deletBtnIcon = new paper.PointText(new paper.Point(buildItem.bounds.size._width - (this.state.squareSize * 1.6 - 6) / 2, (this.state.squareSize * 1.6 - 6) / 2));
     deletBtnIcon.fillColor = '#eee';
     deletBtnIcon.content = '×';
     let deletBtn = new paper.Group([deletBtnBg, deletBtnIcon]);
