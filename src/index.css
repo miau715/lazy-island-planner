@@ -16,6 +16,7 @@ html, body {
 }
 
 h1 {
+  font-size: 28px;
   font-family: 'Varela Round', sans-serif;
   color: #8f7365;
   display: flex;
@@ -23,7 +24,7 @@ h1 {
   justify-content: center;
   margin: 50px 0 0;
   padding-bottom: 8px;
-  background: url("/bg_titleback_l.svg") calc(50% - 190px) bottom no-repeat, url("/bg_titleback_r.svg") calc(50% + 190px) bottom no-repeat;
+  background: url("/bg_titleback_l.svg") calc(50% - 195px) bottom no-repeat, url("/bg_titleback_r.svg") calc(50% + 195px) bottom no-repeat;
   background-size: 64px 50px;
 }
 
@@ -50,6 +51,7 @@ h1 div {
   line-height: 58px;
   position: relative;
   z-index: 10;
+  width: 300px;
 }
 
 h1 + p {
