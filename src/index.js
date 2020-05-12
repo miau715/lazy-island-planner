@@ -66,7 +66,6 @@ class App extends React.Component {
     }
   }
   useDefaultMap() {
-    console.log('here');
     const that = this;
     fetch('test.jpg')
     .then(function(response) {
@@ -380,7 +379,6 @@ class App extends React.Component {
         width: size[0] * this.state.squareSize,
         height: size[1] * this.state.squareSize
       });
-      baseBlock.fillColor = "#fff";
       buildItem = new paper.Group([baseBlock]);
 
       if (this.state.currentTool === 'tree') {
@@ -410,7 +408,7 @@ class App extends React.Component {
         buildItem.addChild(buildImage);
       };
     }
-    let deletBtnBg = new paper.Path.Circle({
+    let deletBtnBg = new paper.Shape.Circle({
       center: [buildItem.bounds.size._width, 0], 
       radius: this.state.squareSize * 0.8
     });
@@ -418,27 +416,32 @@ class App extends React.Component {
     let deletBtnIcon = new paper.PointText(new paper.Point(buildItem.bounds.size._width - (this.state.squareSize * 1.6 - 6) / 2, (this.state.squareSize * 1.6 - 6) / 2));
     deletBtnIcon.fillColor = '#eee';
     deletBtnIcon.content = '×';
+    deletBtnIcon.locked = true;
     let deletBtn = new paper.Group([deletBtnBg, deletBtnIcon]);
     deletBtn.name = 'deletBtn';
+    deletBtn.opacity = 0;
+    deletBtn.locked = true;
     let itemSet = new paper.Group([buildItem, deletBtn]);
     itemSet.position = [setting.hideDist * -1, setting.hideDist * -1];
     buildTool.onMouseMove = (e) => {
       if (isBuild) {
-        itemSet.position.x = this.getSnapPoint(e.point.x, size[0]);
-        itemSet.position.y = this.getSnapPoint(e.point.y, size[1]);
+        itemSet.position.x = this.getSnapPoint(e.point.x, true, itemSet);
+        itemSet.position.y = this.getSnapPoint(e.point.y, false, itemSet);
       }
     }
     buildTool.onMouseDown = (e) => {
+      
       if (isBuild) {
-        itemSet.position.x = this.getSnapPoint(e.point.x, size[0]);
-        itemSet.position.y = this.getSnapPoint(e.point.y, size[1]);
+        itemSet.position.x = this.getSnapPoint(e.point.x, true, itemSet);
+        itemSet.position.y = this.getSnapPoint(e.point.y, false, itemSet);
         isBuild = false;
         itemSet.data.built = true;
       }
       else {
+        paper.project.activeLayer.children.forEach((itemSet)=>{
+          itemSet.children.deletBtn.opacity = 0;
+        });
         const hitResult = paper.project.layers.buildLayer.hitTest(e.point, {
-          segments: true,
-          stroke: true,
           fill: true,
           tolerance: 1
         });
@@ -450,6 +453,8 @@ class App extends React.Component {
           if (!(hitResult.item.parent.name === 'deletBtn')) {
             itemSet = hitResult.item.parent.parent;
             isEdit = true;
+            itemSet.children.deletBtn.opacity = 1;
+            itemSet.children.deletBtn.locked = false;
           }
           else {
             hitResult.item.parent.parent.remove();
@@ -459,17 +464,11 @@ class App extends React.Component {
     }
     buildTool.onMouseDrag = (e) => {
       if (isEdit) {
-        console.log(e.point);
-        itemSet.position.x = this.getSnapPoint(e.point.x, size[0]);
-        itemSet.position.y = this.getSnapPoint(e.point.y, size[1]);
+        itemSet.position.x = this.getSnapPoint(e.point.x, true, itemSet);
+        itemSet.position.y = this.getSnapPoint(e.point.y, false, itemSet);
       }
     }
     buildTool.onMouseUp = (e) => {
-      if (isEdit) {
-        console.log(itemSet.children[0].bounds._height)
-        itemSet.position.x = this.getSnapPoint(e.point.x, size[0]);
-        itemSet.position.y = this.getSnapPoint(e.point.y, size[1]);
-      }
       this.setState({
         currentItem: null
       });
@@ -478,8 +477,14 @@ class App extends React.Component {
       });
     }
   }
-  getSnapPoint(point, size) {
-    const snapPoint = point - (point - setting.mapPadding - (size * this.state.squareSize / 2 + this.state.squareSize * 0.4)) % this.state.squareSize;
+  getSnapPoint(point, isX, itemSet) {
+    let snapPoint;
+    if (isX) {
+      snapPoint = point - (point - itemSet.bounds._width / 2 - setting.mapPadding) % this.state.squareSize;
+    }
+    else {
+      snapPoint = point - (point - itemSet.bounds._height / 2 - setting.mapPadding) % this.state.squareSize;
+    }
     return snapPoint;
   }
   clearBrushHover() {
