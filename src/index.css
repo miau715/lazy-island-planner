@@ -24,14 +24,14 @@ h1 {
   justify-content: center;
   margin: 50px 0 0;
   padding-bottom: 8px;
-  background: url("/bg_titleback_l.svg") calc(50% - 195px) bottom no-repeat, url("/bg_titleback_r.svg") calc(50% + 195px) bottom no-repeat;
+  background: url("img/bg_titleback_l.svg") calc(50% - 195px) bottom no-repeat, url("img/bg_titleback_r.svg") calc(50% + 195px) bottom no-repeat;
   background-size: 64px 50px;
 }
 
 h1::before, h1::after {
   content: '';
   display: block;
-  background-image: url("/bg_title_l.svg");
+  background-image: url("img/bg_title_l.svg");
   background-repeat: no-repeat;
   width: 66px;
   height: 58px;
@@ -40,7 +40,7 @@ h1::before, h1::after {
 }
 
 h1::after {
-  background-image: url("/bg_title_r.svg");
+  background-image: url("img/bg_title_r.svg");
   left: auto;
   right: 10px;
 }
