@@ -3,123 +3,10 @@ import ReactDOM from 'react-dom';
 import paper from 'paper';
 import setting from './setting.json';
 import toolData from './toolData.json';
+import MenuModes from './menuModes.js';
+import MenuTools from './menuTools.js';
+import MenuItems from './menuItems.js';
 import './index.css';
-
-function MenuModes(props) {
-  const toolData = props.toolData;
-  const listItems = toolData.map((mode, i) =>
-    <li key={i}>
-      <MenuBtn data={mode} type='mode' isActive={props.currentMode === mode.mode} onClick={props.onClick} />
-    </li>
-  );
-  return (
-    <ul>{listItems}</ul>
-  );
-}
-
-function MenuBtn(props) {
-  const id = props.data.mode || props.data.tool || props.data.item || props.data.colorName;
-  let className;
-  const isActive = props.isActive ? 'active' : '';
-  if (props.data.colorName) {
-    className = `color ${props.data.colorName} ${isActive}`;
-  }
-  else if (props.data.item) {
-    className = `item ${props.type} ${props.data.item} ${isActive}`;
-  }
-  else {
-    className = `${props.type} ${isActive}`;
-  }
-  if (props.data.image) {
-    if (id === 'colorCustom') {
-      return (
-        <button id={id} onClick={props.onClick} className={className}>
-          <label>
-            <input type='color' defaultValue={props.customColor} onChange={props.changeColor} />
-            <img alt={id} src={props.data.image} />
-          </label>
-        </button>
-      )
-    }
-    else {
-      if (props.type === 'tree') {
-        const colorStyle = {background: props.data.color};
-        return (
-          <button id={id} onClick={props.onClick} className={className} style={colorStyle}>
-            <img alt={id} src={props.data.image} />
-          </button>
-        )
-      }
-      else {
-        return (
-          <button id={id} onClick={props.onClick} className={className}>
-            <img alt={id} src={props.data.image} />
-          </button>
-        )
-      }
-    }
-  }
-  else {
-    let color;
-    if (props.type === 'flower') {
-      color = props.data.item;
-    }
-    else {
-      color = props.data.color;
-    }
-    const colorStyle = {background: color};
-    return (
-      <button id={id} onClick={props.onClick} className={className}>
-        <div className="colorBlock" style={colorStyle}></div>
-      </button>
-    )
-  }
-}
-
-function MenuTools(props) {
-  const listItems = props.currentModeData.tools.map((tool, i) =>
-    <li key={i}>
-      <MenuBtn data={tool} type='tool' isActive={props.currentTool === tool.tool} onClick={props.onClick} />
-    </li>
-  );
-  return (
-    <ul>
-      {listItems}
-    </ul>
-  );
-}
-
-function MenuItems(props) {
-  let menuItems, compareTarget;
-  const type = props.currentTool;
-  if (props.currentMode === 'draw') {
-    menuItems = props.currentModeData.colors;
-    compareTarget = 'colorName';
-  }
-  else {
-    const currentTool = props.currentModeData.tools.find((data) => {
-        if (data.tool === props.currentTool) {
-          return data;
-        }
-      },
-    );
-    menuItems = currentTool.items;
-    compareTarget = 'item';
-  }
-  const listItems = menuItems.map((tool, i) =>
-    <li key={i}>
-      <MenuBtn data={tool} type={type} isActive={tool[compareTarget] === props.currentItem} onClick={props.onClick} customColor={props.customColor} changeColor={props.changeColor} />
-    </li>
-  );
-  return (
-    <div className="menuItems">
-      <hr />
-      <ul>
-        {listItems}
-      </ul>
-    </div>
-  )
-}
 
 class App extends React.Component {
   constructor(props) {
@@ -493,6 +380,7 @@ class App extends React.Component {
         width: size[0] * this.state.squareSize,
         height: size[1] * this.state.squareSize
       });
+      baseBlock.fillColor = "#fff";
       buildItem = new paper.Group([baseBlock]);
 
       if (this.state.currentTool === 'tree') {
@@ -571,12 +459,14 @@ class App extends React.Component {
     }
     buildTool.onMouseDrag = (e) => {
       if (isEdit) {
+        console.log(e.point);
         itemSet.position.x = this.getSnapPoint(e.point.x, size[0]);
         itemSet.position.y = this.getSnapPoint(e.point.y, size[1]);
       }
     }
     buildTool.onMouseUp = (e) => {
       if (isEdit) {
+        console.log(itemSet.children[0].bounds._height)
         itemSet.position.x = this.getSnapPoint(e.point.x, size[0]);
         itemSet.position.y = this.getSnapPoint(e.point.y, size[1]);
       }
