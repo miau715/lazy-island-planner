@@ -1,5 +1,5 @@
 import React from 'react';
-import MenuBtn from './menuBtn.js';
+import MenuBtn from './MenuBtn.js';
 
 function MenuItems(props) {
   let menuItems, compareTarget;

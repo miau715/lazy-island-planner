@@ -1,5 +1,5 @@
 import React from 'react';
-import MenuBtn from './menuBtn.js';
+import MenuBtn from './MenuBtn.js';
 
 function MenuTools(props) {
   const listItems = props.currentModeData.tools.map((tool, i) =>

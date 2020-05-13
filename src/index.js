@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import paper from 'paper';
 import setting from './setting.json';
 import toolData from './toolData.json';
-import MenuModes from './menuModes.js';
-import MenuTools from './menuTools.js';
-import MenuItems from './menuItems.js';
+import MenuModes from './MenuModes.js';
+import MenuTools from './MenuTools.js';
+import MenuItems from './MenuItems.js';
 import './index.css';
 
 class App extends React.Component {
@@ -512,7 +512,7 @@ class App extends React.Component {
           <img src='test.jpg' alt='上傳圖示意圖' className='island-map' />
           <form>
             <input type='file' ref={this.fileInput} accept='image/*' id='img-input' onChange={this.selectImg} />
-            <label for='img-input' className='fake-input'>選擇檔案</label>
+            <label htmlFor='img-input' className='fake-input'>選擇檔案</label>
             <div id='error-message'></div>
             <button type='button' className='btn-upload' onClick={this.upLoadImg}>上傳</button>
           </form>
