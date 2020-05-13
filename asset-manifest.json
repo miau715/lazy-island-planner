@@ -1,23 +1,24 @@
 {
   "files": {
-    "main.css": "/lazy-island-planner/static/css/main.8a4c87ab.chunk.css",
-    "main.js": "/lazy-island-planner/static/js/main.ec78763c.chunk.js",
-    "main.js.map": "/lazy-island-planner/static/js/main.ec78763c.chunk.js.map",
+    "main.css": "/lazy-island-planner/static/css/main.f2326fd3.chunk.css",
+    "main.js": "/lazy-island-planner/static/js/main.767604fb.chunk.js",
+    "main.js.map": "/lazy-island-planner/static/js/main.767604fb.chunk.js.map",
     "runtime-main.js": "/lazy-island-planner/static/js/runtime-main.f1b090b0.js",
     "runtime-main.js.map": "/lazy-island-planner/static/js/runtime-main.f1b090b0.js.map",
-    "static/js/2.34dfd1f0.chunk.js": "/lazy-island-planner/static/js/2.34dfd1f0.chunk.js",
-    "static/js/2.34dfd1f0.chunk.js.map": "/lazy-island-planner/static/js/2.34dfd1f0.chunk.js.map",
+    "static/js/2.eaa0572b.chunk.js": "/lazy-island-planner/static/js/2.eaa0572b.chunk.js",
+    "static/js/2.eaa0572b.chunk.js.map": "/lazy-island-planner/static/js/2.eaa0572b.chunk.js.map",
     "index.html": "/lazy-island-planner/index.html",
-    "precache-manifest.9dc25152d839e9bbff99700f6e1bd99e.js": "/lazy-island-planner/precache-manifest.9dc25152d839e9bbff99700f6e1bd99e.js",
+    "precache-manifest.e92b23ff60fb6f86f65e1c7e7d2363c0.js": "/lazy-island-planner/precache-manifest.e92b23ff60fb6f86f65e1c7e7d2363c0.js",
     "service-worker.js": "/lazy-island-planner/service-worker.js",
-    "static/css/main.8a4c87ab.chunk.css.map": "/lazy-island-planner/static/css/main.8a4c87ab.chunk.css.map",
-    "static/js/2.34dfd1f0.chunk.js.LICENSE.txt": "/lazy-island-planner/static/js/2.34dfd1f0.chunk.js.LICENSE.txt",
-    "static/media/index.css": "/lazy-island-planner/static/media/bg_titleback_r.02318630.svg"
+    "static/css/main.f2326fd3.chunk.css.map": "/lazy-island-planner/static/css/main.f2326fd3.chunk.css.map",
+    "static/js/2.eaa0572b.chunk.js.LICENSE.txt": "/lazy-island-planner/static/js/2.eaa0572b.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/lazy-island-planner/static/media/bg_titleback_r.02318630.svg",
+    "static/media/test.jpg": "/lazy-island-planner/static/media/test.5da2d115.jpg"
   },
   "entrypoints": [
     "static/js/runtime-main.f1b090b0.js",
-    "static/js/2.34dfd1f0.chunk.js",
-    "static/css/main.8a4c87ab.chunk.css",
-    "static/js/main.ec78763c.chunk.js"
+    "static/js/2.eaa0572b.chunk.js",
+    "static/css/main.f2326fd3.chunk.css",
+    "static/js/main.767604fb.chunk.js"
   ]
 }
