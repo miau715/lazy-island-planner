@@ -573,7 +573,7 @@ class App extends React.Component {
                 </li>
                 <li>
                   <button type='button' title='下載地圖' onClick={this.downLoadCanvas}>
-                    <img src={process.env.PUBLIC_URL + '/icon_download.svg'} alt='說明頁' />
+                    <img src={process.env.PUBLIC_URL + '/icon_download.svg'} alt='下載地圖' />
                   </button>
                 </li>
               </ul>
