@@ -13,9 +13,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.canvas = React.createRef();
-    this.fileInput = React.createRef();
+    this.urlInput = React.createRef();
     this.upLoadImg = this.upLoadImg.bind(this);
-    this.useDefaultMap = this.useDefaultMap.bind(this);
+    this.loadMapFromUrl = this.loadMapFromUrl.bind(this);
     this.changeMode = this.changeMode.bind(this);
     this.changeTool = this.changeTool.bind(this);
     this.changeItem = this.changeItem.bind(this);
@@ -42,7 +42,7 @@ class App extends React.Component {
       }
     }
   }
-  selectImg(e) {
+  upLoadImg(e) {
     const label = e.target.nextElementSibling;
     const labelVal = label.innerHTML;
 		let fileName = '';
@@ -53,9 +53,7 @@ class App extends React.Component {
 		else {
       label.innerHTML = labelVal;
     }
-  }
-  upLoadImg() {
-    const uploadImg = this.fileInput.current.files[0];
+    const uploadImg = e.target.files[0];
     const reader = new FileReader();
     const that = this;
     reader.addEventListener("load", function () {
@@ -68,9 +66,16 @@ class App extends React.Component {
       reader.readAsDataURL(uploadImg);
     }
   }
-  useDefaultMap() {
+  loadMapFromUrl(e) {
     const that = this;
-    fetch(sampleImg)
+    let url;
+    if (e.target.id === 'mapUseDefault') {
+      url = sampleImg;
+    }
+    else {
+      url = this.urlInput.current.value;
+    }
+    fetch(url)
     .then(function(response) {
       return response.blob()
     })
@@ -443,7 +448,7 @@ class App extends React.Component {
         itemSet.data.built = true;
       }
       else {
-        paper.project.activeLayer.children.forEach((itemSet)=>{
+        paper.project.activeLayer.children.forEach((itemSet) => {
           itemSet.children.deletBtn.opacity = 0;
         });
         const hitResult = paper.project.layers.buildLayer.hitTest(e.point, {
@@ -509,13 +514,18 @@ class App extends React.Component {
         <div className='intro'>
           <h1><div>Lazy Island Planner</div></h1>
           <p>這是一個給懶人用的《集合啦！動物森友會》島嶼規劃工具。</p>
-          <p>上傳你擷取的島嶼地圖畫面（如下圖）即可開始，或<button className='link' onClick={this.useDefaultMap}>先用我的地圖試試看</button>。</p>
+          <p>上傳你擷取的島嶼地圖畫面（如下圖）即可開始，也可以<button className='link' id='mapUseDefault' onClick={this.loadMapFromUrl}>先用我的地圖試試看</button>。</p>
           <img src={sampleImg} alt='上傳圖示意圖' className='island-map' />
           <form>
-            <input type='file' ref={this.fileInput} accept='image/*' id='img-input' onChange={this.selectImg} />
-            <label htmlFor='img-input' className='fake-input'>選擇檔案</label>
+            <input type='file' accept='image/*' id='img-input' onChange={this.upLoadImg} />
+            <label htmlFor='img-input' className='btn fake-input'>上傳圖檔</label>
             <div id='error-message'></div>
-            <button type='button' className='btn-upload' onClick={this.upLoadImg}>上傳</button>
+            <div className='or'>或</div>
+            <div className='use-url'>
+              <label>使用已上傳的圖片連結：</label>
+              <input type='text' ref={this.urlInput}  /> 
+              <button type='button' id='mapFromUrl' onClick={this.loadMapFromUrl}>確定</button>
+            </div>
           </form>
         </div>
       )
