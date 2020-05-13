@@ -2,6 +2,7 @@ html, body {
   margin: 0;
   padding: 0;
   background: rgb(119, 214, 194);
+  font-family: sans-serif;
 }
 
 * {
@@ -355,7 +356,7 @@ canvas {
   position: fixed;
   z-index: 10;
   width: 600px;
-  top: calc(50vh - 300px);
+  top: calc(50vh - 280px);
   left: calc(50% - 250px);
   background: #9be7d7;
   padding: 50px;
