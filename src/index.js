@@ -425,6 +425,7 @@ class App extends React.Component {
     // add img
     if (thisItem.image && (thisTool.tool !== 'bridge' && thisTool.tool !== 'slope')) {
       const buildImage = new paper.Raster(process.env.PUBLIC_URL + '/' + thisItem.image);
+      buildImage.opacity = 0;
       const squareSize = this.state.squareSize;
       
       const imageSizeSquare = currentTool === 'tree' ? 1 : 2.8;
@@ -432,6 +433,7 @@ class App extends React.Component {
         buildImage.size = new paper.Size(buildImage.width * squareSize * imageSizeSquare / buildImage.height, squareSize * imageSizeSquare);
         buildImage.position = buildItem.position;
         buildImage.locked = true;
+        buildImage.opacity = 1;
         buildItem.addChild(buildImage);
       };
     }
@@ -590,7 +592,7 @@ class App extends React.Component {
                 <a href='https://bobacupcake.itch.io/island-planner' target='_blank'>Island Planner</a>
               </li>
             </ul>
-            <button class='btn close-modal' onClick={this.closeModal}>關閉</button>
+            <button className='btn close-modal' onClick={this.closeModal}>關閉</button>
           </div>
         </div>
       );
