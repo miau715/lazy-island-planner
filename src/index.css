@@ -15,9 +15,18 @@ html, body {
   color: #026c66;
 }
 
+a {
+  color: #024a6c;
+}
+
+a:hover {
+  color: #0d5577;
+}
+
 h1 {
   font-size: 28px;
   font-family: 'Varela Round', sans-serif;
+  text-align: center;
   color: #8f7365;
   display: flex;
   align-items: flex-start;
@@ -88,18 +97,17 @@ button.link {
 
 #img-input + label {
   font-size: 1em;
-  color: #166491;
-  background-color: rgba(255,255,255,0.7);
+  background: #2b9ba2;
+  color: #eee;
   display: inline-block;
   padding: 5px 20px;
   border-radius: 30px;
   margin: 30px 0 0;
-  border: #2b9ba2 5px solid;
 }
 
 #img-input:focus + label,
 #img-input + label:hover {
-  background-color: rgba(255,255,255,0.9);
+  background-color: #0c8991;
 }
 
 #img-input + label {
@@ -107,8 +115,8 @@ button.link {
 }
 
 #img-input:focus + label {
-	outline: 1px dotted #000;
-	outline: -webkit-focus-ring-color auto 5px;
+  outline: none;
+  box-shadow: #006567 0 0 0 3px;
 }
 
 .or {
@@ -141,6 +149,11 @@ button.link {
   line-height: 31px;
 }
 
+.use-url button:focus {
+  outline: none;
+  box-shadow: #006567 0 0 0 3px;
+}
+
 .editor {
   display: flex;
   justify-content: center;
@@ -148,12 +161,12 @@ button.link {
   padding: 30px;
 }
 
-aside {
+aside.tool-aside {
   width: 210px;
   margin-right: 30px;
 }
 
-aside ul {
+aside.tool-aside ul {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -163,26 +176,26 @@ aside ul {
   grid-row-gap: 10px;
 }
 
-aside .modes {
+aside.tool-aside .modes {
   background: rgba(255,255,255,0.7);
   border-radius: 20px;
   margin-bottom: 10px;
   padding: 15px;
 }
 
-aside .tools {
+aside.tool-aside .tools {
   background: #63c6b8;
   border-radius: 20px;
   padding: 15px;
 }
 
-aside hr {
+aside.tool-aside hr {
   border: rgba(255,255,255,0.5) 2px dashed;
   border-radius: 3px;
   margin: 15px 0;
 }
 
-aside button {
+aside.tool-aside button {
   display: block;
   width: 50px;
   height: 50px;
@@ -194,49 +207,49 @@ aside button {
   border: rgba(255,255,255,0.4) 5px solid;
 }
 
-aside button:focus {
+aside.tool-aside button:focus {
   outline: none;
   box-shadow: #008a8c 0 0 0 3px;
 }
 
-aside button.active, aside button.color.active {
+aside.tool-aside button.active, aside.tool-aside button.color.active {
   border-color: #fff;
   box-shadow: none;
 }
 
-aside button.mode.active {
+aside.tool-aside button.mode.active {
   border-color: #008a8c;
   box-shadow: none;
 }
 
-aside button img {
+aside.tool-aside button img {
   display: block;
   max-width: 25px;
   max-height: 25px;
   margin: 0 auto;
 }
 
-aside .menuItems button {
+aside.tool-aside .menuItems button {
   background: rgba(255,255,255,0.8);
 }
 
-aside button.color {
+aside.tool-aside button.color {
   border: #9adbd6 5px solid;
 }
 
-aside button.color img {
+aside.tool-aside button.color img {
   max-width: 100%;
   max-height: 100%;
   border-radius: 50%;
 }
 
-aside button.colorCustom {
+aside.tool-aside button.colorCustom {
   background: #b0a07c;
   position: relative;
   overflow: hidden;
 }
 
-aside button.colorCustom input {
+aside.tool-aside button.colorCustom input {
   position: absolute;
   border: none;
   padding: 0;
@@ -246,7 +259,7 @@ aside button.colorCustom input {
   left: -5px;
 }
 
-aside button.colorCustom img {
+aside.tool-aside button.colorCustom img {
   display: block;
   position: relative;
   max-width: 25px;
@@ -254,46 +267,158 @@ aside button.colorCustom img {
   margin: 0 auto;
 }
 
-aside button.building {
+aside.tool-aside button.building {
   background: #544f40;
 }
 
-aside button.item.home {
+aside.tool-aside button.item.home {
   background: #f784ae;
 }
 
-aside button.item.house {
+aside.tool-aside button.item.house {
   background: #f8b616;
 }
 
-aside button.bridge {
+aside.tool-aside button.bridge {
   background: #77d6c2;
 }
 
-aside button.slope {
+aside.tool-aside button.slope {
   background: #468045;
 }
 
-aside button.tree {
+aside.tool-aside button.tree {
   background: #00b27a;
 }
 
-aside button.tree img {
+aside.tool-aside button.tree img {
   width: 20px;
   height: 20px;
 }
 
-aside button.flower {
+aside.tool-aside button.flower {
   border: #9adbd6 5px solid;
 }
 
-aside button .colorBlock {
+aside.tool-aside button .colorBlock {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   background: #00b27a;
 }
 
+aside.sub-aside {
+  margin-left: 20px;
+}
+
+aside.sub-aside ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+aside.sub-aside ul li {
+  margin-bottom: 10px;
+}
+
+aside.sub-aside ul button {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: #fff;
+  background: #024a6c;
+  border: none;
+  padding: 0;
+}
+
+aside.sub-aside ul button:hover {
+  background: #0d5577;
+}
+
+aside.sub-aside ul button:focus {
+  outline: none;
+  box-shadow: #008a8c 0 0 0 3px;
+}
+
+aside.sub-aside ul button img {
+  width: 24px;
+  height: 24px;
+}
+
 canvas {
+  display: block;
+}
+
+#info-modal {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  width: 600px;
+  top: calc(50vh - 300px);
+  left: calc(50% - 250px);
+  background: #9be7d7;
+  padding: 50px;
+  color: #026c66;
+}
+
+#info-modal h1 {
+  margin: 0 0 30px;
+}
+
+#info-modal ul li {
+  margin-bottom: 5px;
+}
+
+#info-modal .close-modal.round {
+  position: absolute;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  top: -25px;
+  right: -25px;
+  font-size: 30px;
+  background: #af7d4f;
+  color: #eee;
+}
+
+#info-modal .close-modal.round:focus {
+  outline: none;
+  box-shadow: #835021 0 0 0 3px;
+}
+
+#info-modal .close-modal.btn {
+  display: block;
+  margin: 50px auto 0;
+  background: #2b9ba2;
+  color: #fff;
+  font-size: 1em;
+  border: none;
+  padding: 10px 30px;
+  border-radius: 30px;
+}
+
+#info-modal .close-modal.btn:focus {
+  outline: none;
+  box-shadow: #008a8c 0 0 0 3px;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+body.modal-open::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 5;
+  background-color: rgba(0,0,0,0.7);
+}
+
+body.modal-open #info-modal {
   display: block;
 }

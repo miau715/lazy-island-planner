@@ -16,6 +16,7 @@ class App extends React.Component {
     this.urlInput = React.createRef();
     this.upLoadImg = this.upLoadImg.bind(this);
     this.loadMapFromUrl = this.loadMapFromUrl.bind(this);
+    this.downLoadCanvas = this.downLoadCanvas.bind(this);
     this.changeMode = this.changeMode.bind(this);
     this.changeTool = this.changeTool.bind(this);
     this.changeItem = this.changeItem.bind(this);
@@ -89,6 +90,21 @@ class App extends React.Component {
         that.renderMap(reader.result);
       }, false);
     });
+  }
+  openModal() {
+    document.body.classList.add("modal-open");
+  }
+  closeModal() {
+    document.body.classList.remove("modal-open");
+  }
+  downLoadCanvas() {
+    const canvas = this.canvas.current;
+    const img = canvas.toDataURL('image/jpg');
+    var a = document.createElement('a');
+    a.href = img;
+    a.download = 'myIslandImg.jpg';
+    document.body.appendChild(a);
+    a.click();
   }
   renderMap(url) {
     const canvas = this.canvas.current;
@@ -532,19 +548,50 @@ class App extends React.Component {
     }
     else {
       return (
-        <div className='editor'>
-          <aside>
-            <div className='modes'>
-              <MenuModes toolData={toolData.toolData} currentMode = {this.state.currentMode} onClick={this.changeMode} />
-            </div>
-            
-            <div className='tools'>
-              <MenuTools currentTool={this.state.currentTool} currentModeData={this.state.currentModeData} onClick={this.changeTool} />
-              <MenuItems currentMode={this.state.currentMode} currentModeData={this.state.currentModeData} currentTool={this.state.currentTool} currentItem={this.state.currentItem} onClick={this.changeItem} customColor={this.state.customColor} changeColor={this.changeColor} /> 
-            </div>
-          </aside>
-          <canvas id='canvas' ref={this.canvas}>
-          </canvas>
+        <div className='wrapper'>
+          <div className='editor'>
+            <aside className='tool-aside'>
+              <div className='modes'>
+                <MenuModes toolData={toolData.toolData} currentMode = {this.state.currentMode} onClick={this.changeMode} />
+              </div>
+              
+              <div className='tools'>
+                <MenuTools currentTool={this.state.currentTool} currentModeData={this.state.currentModeData} onClick={this.changeTool} />
+                <MenuItems currentMode={this.state.currentMode} currentModeData={this.state.currentModeData} currentTool={this.state.currentTool} currentItem={this.state.currentItem} onClick={this.changeItem} customColor={this.state.customColor} changeColor={this.changeColor} /> 
+              </div>
+            </aside>
+            <canvas id='canvas' ref={this.canvas}>
+            </canvas>
+            <aside className='sub-aside'>
+              <ul>
+                <li>
+                  <button type='button' title='說明頁' onClick={this.openModal}>
+                    <img src={process.env.PUBLIC_URL + '/icon_question.svg'} alt='說明頁' />
+                  </button>
+                </li>
+                <li>
+                  <button type='button' title='下載地圖' onClick={this.downLoadCanvas}>
+                    <img src={process.env.PUBLIC_URL + '/icon_download.svg'} alt='說明頁' />
+                  </button>
+                </li>
+              </ul>
+            </aside>
+          </div>
+          <div id='info-modal'>
+            <button className='close-modal round' onClick={this.closeModal}>×</button>
+            <h1><div>Lazy Island Planner</div></h1>
+            <p>這是個功能非常陽春的懶人工具，<strong>沒有回復功能，只能重新整理回到開始畫面讀取檔案從頭再來</strong>。<strong>也不能儲存編輯到一半的狀態，只能把成品下載成圖檔。</strong></p>
+            <p>如果你覺得這個破工具很難用，可以試試看其他專業開發者做的高級工具：</p>
+            <ul>
+              <li>
+                <a href='https://eugeneration.github.io/HappyIslandDesigner/' target='_blank'>Happy Island Designer</a>
+              </li>
+              <li>
+                <a href='https://bobacupcake.itch.io/island-planner' target='_blank'>Island Planner</a>
+              </li>
+            </ul>
+            <button class='btn close-modal' onClick={this.closeModal}>關閉</button>
+          </div>
         </div>
       );
     }
