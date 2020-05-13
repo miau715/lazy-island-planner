@@ -6,6 +6,7 @@ import toolData from './toolData.json';
 import MenuModes from './MenuModes.js';
 import MenuTools from './MenuTools.js';
 import MenuItems from './MenuItems.js';
+import sampleImg from './img/test.jpg';
 import './index.css';
 
 class App extends React.Component {
@@ -69,7 +70,7 @@ class App extends React.Component {
   }
   useDefaultMap() {
     const that = this;
-    fetch('test.jpg')
+    fetch(sampleImg)
     .then(function(response) {
       return response.blob()
     })
@@ -402,7 +403,7 @@ class App extends React.Component {
     
     // add img
     if (thisItem.image && (thisTool.tool !== 'bridge' && thisTool.tool !== 'slope')) {
-      const buildImage = new paper.Raster(thisItem.image);
+      const buildImage = new paper.Raster(process.env.PUBLIC_URL + '/' + thisItem.image);
       const squareSize = this.state.squareSize;
       
       const imageSizeSquare = currentTool === 'tree' ? 1 : 2.8;
@@ -509,7 +510,7 @@ class App extends React.Component {
           <h1><div>Lazy Island Planner</div></h1>
           <p>這是一個給懶人用的《集合啦！動物森友會》島嶼規劃工具。</p>
           <p>上傳你擷取的島嶼地圖畫面（如下圖）即可開始，或<button className='link' onClick={this.useDefaultMap}>先用我的地圖試試看</button>。</p>
-          <img src='test.jpg' alt='上傳圖示意圖' className='island-map' />
+          <img src={sampleImg} alt='上傳圖示意圖' className='island-map' />
           <form>
             <input type='file' ref={this.fileInput} accept='image/*' id='img-input' onChange={this.selectImg} />
             <label htmlFor='img-input' className='fake-input'>選擇檔案</label>

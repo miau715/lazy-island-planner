@@ -19,7 +19,7 @@ function MenuBtn(props) {
         <button id={id} onClick={props.onClick} className={className}>
           <label>
             <input type='color' defaultValue={props.customColor} onChange={props.changeColor} />
-            <img alt={id} src={props.data.image} />
+            <img alt={id} src={process.env.PUBLIC_URL + '/' + props.data.image} />
           </label>
         </button>
       )
@@ -29,14 +29,14 @@ function MenuBtn(props) {
         const colorStyle = {background: props.data.color};
         return (
           <button id={id} onClick={props.onClick} className={className} style={colorStyle}>
-            <img alt={id} src={props.data.image} />
+            <img alt={id} src={process.env.PUBLIC_URL + '/' + props.data.image} />
           </button>
         )
       }
       else {
         return (
           <button id={id} onClick={props.onClick} className={className}>
-            <img alt={id} src={props.data.image} />
+            <img alt={id} src={process.env.PUBLIC_URL + '/' + props.data.image} />
           </button>
         )
       }
