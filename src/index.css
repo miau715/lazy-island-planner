@@ -64,8 +64,26 @@ h1 div {
   width: 300px;
 }
 
-h1 + p {
-  margin-top: 50px;
+.lang-menu {
+  display: flex;
+  margin: 30px 0 45px;
+  justify-content: center;
+}
+
+.lang-menu button {
+  border: none;
+  background: none;
+  font-size: 15px;
+  color: #166491;
+  padding: 3px 10px;
+  margin: 0 10px;
+  border-bottom: transparent 3px solid;
+}
+
+.lang-menu button.active, .lang-menu button:hover {
+  color: #04486f;
+  border-bottom: #166491 3px solid;
+  transition: color 0.3s, border-color 0.3s;
 }
 
 img.island-map {
@@ -135,6 +153,7 @@ button.link {
   border-radius: 5px;
   padding: 8px 10px;
   width: 300px;
+  margin-left: 5px;
 }
 
 .use-url button {
@@ -356,7 +375,9 @@ canvas {
   position: fixed;
   z-index: 10;
   width: 600px;
-  top: calc(50vh - 280px);
+  height: 500px;
+  margin-top: -250px;
+  top: 50vh;
   left: calc(50% - 250px);
   background: #9be7d7;
   padding: 50px;

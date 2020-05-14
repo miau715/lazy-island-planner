@@ -7,6 +7,9 @@ import MenuModes from './MenuModes.js';
 import MenuTools from './MenuTools.js';
 import MenuItems from './MenuItems.js';
 import sampleImg from './img/test.jpg';
+import i18n from "i18next";
+import { Translation } from 'react-i18next';
+import './i18n';
 import './index.css';
 
 class App extends React.Component {
@@ -32,6 +35,14 @@ class App extends React.Component {
       currentItem: toolData.toolData[0].colors[0].colorName,
       customColor: toolData.toolData[0].colors[toolData.toolData[0].colors.length - 1].color[0]
     };
+  }
+  changeLanguage(e) {
+    e.target.parentElement.querySelectorAll('button').forEach((btn)=>{
+      btn.classList.remove('active');
+    });
+    
+    e.target.classList.add('active');
+    i18n.changeLanguage(e.target.name);
   }
   componentDidUpdate(prevProps) {
     if (paper.project) {
@@ -531,20 +542,35 @@ class App extends React.Component {
       return (
         <div className='intro'>
           <h1><div>Lazy Island Planner</div></h1>
-          <p>這是一個給懶人用的《集合啦！動物森友會》島嶼規劃工具。</p>
-          <p>上傳你擷取的島嶼地圖畫面（如下圖）即可開始，也可以<button className='link' id='mapUseDefault' onClick={this.loadMapFromUrl}>先用我的地圖試試看</button>。</p>
-          <img src={sampleImg} alt='上傳圖示意圖' className='island-map' />
-          <form>
-            <input type='file' accept='image/*' id='img-input' onChange={this.upLoadImg} />
-            <label htmlFor='img-input' className='btn fake-input'>上傳圖檔</label>
-            <div id='error-message'></div>
-            <div className='or'>或</div>
-            <div className='use-url'>
-              <label>使用已上傳的圖片連結：</label>
-              <input type='text' ref={this.urlInput}  /> 
-              <button type='button' id='mapFromUrl' onClick={this.loadMapFromUrl}>確定</button>
-            </div>
-          </form>
+          <div className='lang-menu'>
+            <button name='zh-TW' onClick={this.changeLanguage}>台灣華語</button>
+            <button name='en' onClick={this.changeLanguage}>English</button>
+            <button name='ja' onClick={this.changeLanguage}>日本語</button>
+          </div>
+          <Translation>
+            {(t, { i18n }) => 
+              <div>
+                <p>{t('This is a simple tool for Animal Crossing')}</p>
+                <p>{t('Upload your map screenshot to start')}{t('or you can')}<button className='link' id='mapUseDefault' onClick={this.loadMapFromUrl}>{t('try with my map')}</button>{t('period')}</p>
+              </div>
+            }
+          </Translation>
+          <img src={sampleImg} alt='Map sample' className='island-map' />
+          <Translation>
+            {(t, { i18n }) => 
+              <form>
+                <input type='file' accept='image/*' id='img-input' onChange={this.upLoadImg} />
+                <label htmlFor='img-input' className='btn fake-input'>{t('Upload image')}</label>
+                <div id='error-message'></div>
+                <div className='or'>{t('or')}</div>
+                <div className='use-url'>
+                  <label>{t('Use the URL of uploaded image')}</label>
+                  <input type='text' ref={this.urlInput}  /> 
+                  <button type='button' id='mapFromUrl' onClick={this.loadMapFromUrl}>{t('Confirm')}</button>
+                </div>
+              </form>
+            }
+          </Translation>
         </div>
       )
     }
@@ -565,35 +591,43 @@ class App extends React.Component {
             <canvas id='canvas' ref={this.canvas}>
             </canvas>
             <aside className='sub-aside'>
-              <ul>
-                <li>
-                  <button type='button' title='說明頁' onClick={this.openModal}>
-                    <img src={process.env.PUBLIC_URL + '/icon_question.svg'} alt='說明頁' />
-                  </button>
-                </li>
-                <li>
-                  <button type='button' title='下載地圖' onClick={this.downLoadCanvas}>
-                    <img src={process.env.PUBLIC_URL + '/icon_download.svg'} alt='下載地圖' />
-                  </button>
-                </li>
-              </ul>
+              <Translation>
+                {(t, { i18n }) => 
+                  <ul>
+                    <li>
+                      <button type='button' title={t('Info')} onClick={this.openModal}>
+                        <img src={process.env.PUBLIC_URL + '/icon_question.svg'} alt={t('Info')} />
+                      </button>
+                    </li>
+                    <li>
+                      <button type='button' title={t('Download map')} onClick={this.downLoadCanvas}>
+                        <img src={process.env.PUBLIC_URL + '/icon_download.svg'} alt={t('Download map')} />
+                      </button>
+                    </li>
+                  </ul>
+                }
+              </Translation>
             </aside>
           </div>
-          <div id='info-modal'>
-            <button className='close-modal round' onClick={this.closeModal}>×</button>
-            <h1><div>Lazy Island Planner</div></h1>
-            <p>這是個功能非常陽春的懶人工具，<strong>沒有回復功能，只能重新整理回到開始畫面讀取檔案從頭再來</strong>。<strong>也不能儲存編輯到一半的狀態，只能把成品下載成圖檔。</strong></p>
-            <p>如果你覺得這個破工具很難用，可以試試看其他專業開發者做的高級工具：</p>
-            <ul>
-              <li>
-                <a href='https://eugeneration.github.io/HappyIslandDesigner/' target='_blank'>Happy Island Designer</a>
-              </li>
-              <li>
-                <a href='https://bobacupcake.itch.io/island-planner' target='_blank'>Island Planner</a>
-              </li>
-            </ul>
-            <button className='btn close-modal' onClick={this.closeModal}>關閉</button>
-          </div>
+          <Translation>
+            {(t, { i18n }) => 
+              <div id='info-modal'>
+                <button className='close-modal round' onClick={this.closeModal}>×</button>
+                <h1><div>Lazy Island Planner</div></h1>
+                <p>{t('This is a very simple tool')}<strong>{t('No undo')}{t('No save')}</strong></p>
+                <p>{t('You can try other great tools')}</p>
+                <ul>
+                  <li>
+                    <a href='https://eugeneration.github.io/HappyIslandDesigner/' target='_blank'>Happy Island Designer</a>
+                  </li>
+                  <li>
+                    <a href='https://bobacupcake.itch.io/island-planner' target='_blank'>Island Planner</a>
+                  </li>
+                </ul>
+                <button className='btn close-modal' onClick={this.closeModal}>{t('Close')}</button>
+              </div>
+            }
+          </Translation>
         </div>
       );
     }
