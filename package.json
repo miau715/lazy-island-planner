@@ -8,6 +8,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "i18next": "^19.4.4",
+    "i18next-browser-languagedetector": "^4.1.1",
     "paper": "^0.12.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

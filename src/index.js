@@ -25,6 +25,7 @@ class App extends React.Component {
     this.changeItem = this.changeItem.bind(this);
     this.changeColor = this.changeColor.bind(this);
     this.state = {
+      language: i18n.language,
       isImgUploaded: false,
       canvasSizeX: setting.squareSize * setting.squarePerBlock * setting.mapXBlock + setting.mapPadding * 2,
       canvasSizeY: setting.squareSize * setting.squarePerBlock * setting.mapYBlock + setting.mapPadding * 2,
@@ -543,9 +544,9 @@ class App extends React.Component {
         <div className='intro'>
           <h1><div>Lazy Island Planner</div></h1>
           <div className='lang-menu'>
-            <button name='zh-TW' onClick={this.changeLanguage}>台灣華語</button>
-            <button name='en' onClick={this.changeLanguage}>English</button>
-            <button name='ja' onClick={this.changeLanguage}>日本語</button>
+            <button name='zh-TW' className={(this.state.language === 'zh-TW' || this.state.language === 'zh') ? 'active' : ''} onClick={this.changeLanguage}>台灣華語</button>
+            <button name='en' className={(this.state.language !== 'zh-TW' && this.state.language !== 'zh' && this.state.language !== 'ja') ? 'active' : ''} onClick={this.changeLanguage}>English</button>
+            <button name='ja' className={this.state.language === 'ja' ? 'active' : ''} onClick={this.changeLanguage}>日本語</button>
           </div>
           <Translation>
             {(t, { i18n }) => 
