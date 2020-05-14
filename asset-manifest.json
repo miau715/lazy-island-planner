@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/lazy-island-planner/static/css/main.12ecf862.chunk.css",
-    "main.js": "/lazy-island-planner/static/js/main.77949f3a.chunk.js",
-    "main.js.map": "/lazy-island-planner/static/js/main.77949f3a.chunk.js.map",
+    "main.css": "/lazy-island-planner/static/css/main.e83c087b.chunk.css",
+    "main.js": "/lazy-island-planner/static/js/main.62aa3b80.chunk.js",
+    "main.js.map": "/lazy-island-planner/static/js/main.62aa3b80.chunk.js.map",
     "runtime-main.js": "/lazy-island-planner/static/js/runtime-main.f1b090b0.js",
     "runtime-main.js.map": "/lazy-island-planner/static/js/runtime-main.f1b090b0.js.map",
-    "static/js/2.eaa0572b.chunk.js": "/lazy-island-planner/static/js/2.eaa0572b.chunk.js",
-    "static/js/2.eaa0572b.chunk.js.map": "/lazy-island-planner/static/js/2.eaa0572b.chunk.js.map",
+    "static/js/2.b7aac72b.chunk.js": "/lazy-island-planner/static/js/2.b7aac72b.chunk.js",
+    "static/js/2.b7aac72b.chunk.js.map": "/lazy-island-planner/static/js/2.b7aac72b.chunk.js.map",
     "index.html": "/lazy-island-planner/index.html",
-    "precache-manifest.a9fd21e73f936e62c5eb82a3a229f263.js": "/lazy-island-planner/precache-manifest.a9fd21e73f936e62c5eb82a3a229f263.js",
+    "precache-manifest.3c292e759a5d31362d56d2fc7f11a886.js": "/lazy-island-planner/precache-manifest.3c292e759a5d31362d56d2fc7f11a886.js",
     "service-worker.js": "/lazy-island-planner/service-worker.js",
-    "static/css/main.12ecf862.chunk.css.map": "/lazy-island-planner/static/css/main.12ecf862.chunk.css.map",
-    "static/js/2.eaa0572b.chunk.js.LICENSE.txt": "/lazy-island-planner/static/js/2.eaa0572b.chunk.js.LICENSE.txt",
+    "static/css/main.e83c087b.chunk.css.map": "/lazy-island-planner/static/css/main.e83c087b.chunk.css.map",
+    "static/js/2.b7aac72b.chunk.js.LICENSE.txt": "/lazy-island-planner/static/js/2.b7aac72b.chunk.js.LICENSE.txt",
     "static/media/index.css": "/lazy-island-planner/static/media/bg_titleback_r.02318630.svg",
     "static/media/test.jpg": "/lazy-island-planner/static/media/test.5da2d115.jpg"
   },
   "entrypoints": [
     "static/js/runtime-main.f1b090b0.js",
-    "static/js/2.eaa0572b.chunk.js",
-    "static/css/main.12ecf862.chunk.css",
-    "static/js/main.77949f3a.chunk.js"
+    "static/js/2.b7aac72b.chunk.js",
+    "static/css/main.e83c087b.chunk.css",
+    "static/js/main.62aa3b80.chunk.js"
   ]
 }

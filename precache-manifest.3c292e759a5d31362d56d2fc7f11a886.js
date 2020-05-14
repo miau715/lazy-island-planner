@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "5f2de8ba11ecbae7383f058413219de6",
+    "revision": "1368e66bd175912a9f1b7fc51125a4b9",
     "url": "/lazy-island-planner/index.html"
   },
   {
-    "revision": "83676b9a1a19f944a35c",
-    "url": "/lazy-island-planner/static/css/main.12ecf862.chunk.css"
+    "revision": "38e85d14d1a4c9f53459",
+    "url": "/lazy-island-planner/static/css/main.e83c087b.chunk.css"
   },
   {
-    "revision": "465a715e312fdf201c1a",
-    "url": "/lazy-island-planner/static/js/2.eaa0572b.chunk.js"
+    "revision": "8108314b08e79d7cf094",
+    "url": "/lazy-island-planner/static/js/2.b7aac72b.chunk.js"
   },
   {
     "revision": "e88a3e95b5364d46e95b35ae8c0dc27d",
-    "url": "/lazy-island-planner/static/js/2.eaa0572b.chunk.js.LICENSE.txt"
+    "url": "/lazy-island-planner/static/js/2.b7aac72b.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "83676b9a1a19f944a35c",
-    "url": "/lazy-island-planner/static/js/main.77949f3a.chunk.js"
+    "revision": "38e85d14d1a4c9f53459",
+    "url": "/lazy-island-planner/static/js/main.62aa3b80.chunk.js"
   },
   {
     "revision": "41e25e3de727faf5e251",
