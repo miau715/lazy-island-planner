@@ -92,7 +92,13 @@ img.island-map {
 }
 
 .error-message {
-  color: #cc0000;
+  margin-top: 10px;
+  color: #830000;
+  display: none;
+}
+
+.error-message.active {
+  display: block;
 }
 
 button.link {

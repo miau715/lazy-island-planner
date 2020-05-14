@@ -69,15 +69,26 @@ class App extends React.Component {
     const uploadImg = e.target.files[0];
     const reader = new FileReader();
     const that = this;
+    if (uploadImg) {
+      const img = new Image();
+      img.src = window.URL.createObjectURL(uploadImg);
+      img.addEventListener('load', () => {
+        const errorMessageDiv = document.getElementById('img-input-error');
+        if (img.width !== setting.imgWidth || img.height !== setting.imgHeight) {
+          errorMessageDiv.classList.add('active');
+          return false;
+        }
+        else {
+          reader.readAsDataURL(uploadImg);
+        }
+      });
+    }
     reader.addEventListener("load", function () {
       that.setState({
         isImgUploaded: true
       });
       that.renderMap(reader.result);
     }, false);
-    if (uploadImg) {
-      reader.readAsDataURL(uploadImg);
-    }
   }
   loadMapFromUrl(e) {
     const that = this;
@@ -93,14 +104,31 @@ class App extends React.Component {
       return response.blob()
     })
     .then(function(blob) {
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.addEventListener("load", function () {
-        that.setState({
-          isImgUploaded: true
+      if (blob.type !== 'image/jpeg') {
+        const errorMessageDiv = document.getElementById('url-error');
+        errorMessageDiv.classList.add('active');
+      }
+      else {
+        const img = new Image();
+        img.src = url;
+        img.addEventListener('load', () => {
+          const errorMessageDiv = document.getElementById('url-error');
+          if (img.width !== setting.imgWidth || img.height !== setting.imgHeight) {
+            errorMessageDiv.classList.add('active');
+            return false;
+          }
+          else {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.addEventListener("load", function () {
+              that.setState({
+                isImgUploaded: true
+              });
+              that.renderMap(reader.result);
+            }, false);
+          }
         });
-        that.renderMap(reader.result);
-      }, false);
+      }
     });
   }
   openModal() {
@@ -560,15 +588,16 @@ class App extends React.Component {
           <Translation>
             {(t, { i18n }) => 
               <form>
-                <input type='file' accept='image/*' id='img-input' onChange={this.upLoadImg} />
+                <input type='file' accept='image/.jpg, .jpeg' id='img-input' onChange={this.upLoadImg} />
                 <label htmlFor='img-input' className='btn fake-input'>{t('Upload image')}</label>
-                <div id='error-message'></div>
+                <div id='img-input-error' className='error-message'>{t('Sorry this seems not a correct map image')}</div>
                 <div className='or'>{t('or')}</div>
                 <div className='use-url'>
                   <label>{t('Use the URL of uploaded image')}</label>
                   <input type='text' ref={this.urlInput}  /> 
                   <button type='button' id='mapFromUrl' onClick={this.loadMapFromUrl}>{t('Confirm')}</button>
                 </div>
+                <div id='url-error' className='error-message'>{t('Sorry this seems not a correct map image url')}</div>
               </form>
             }
           </Translation>

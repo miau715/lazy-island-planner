@@ -8,6 +8,8 @@
   "colorGrid": "rgba(255, 255, 255, 0.2)",
   "colorMainGrid": "rgba(255, 255, 255, 0.4)",
   "colorGridMark": "#2f9b8b",
+  "imgWidth": 1280,
+  "imgHeight": 720,
   "sampleStartX": 354,
   "sampleStartY": 117,
   "sampleEndX": 953,
