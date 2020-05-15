@@ -104,7 +104,7 @@ class App extends React.Component {
       return response.blob()
     })
     .then(function(blob) {
-      if (blob.type !== 'image/jpeg') {
+      if (!blob.type.includes('image/jpeg')) {
         const errorMessageDiv = document.getElementById('url-error');
         errorMessageDiv.classList.add('active');
       }
