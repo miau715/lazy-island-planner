@@ -76,7 +76,7 @@ const resources = {
       'This is a very simple tool': 'これはとてもシンプルなツールです。',
       'No undo': '元に戻す機能がありません。リロードして最初からやり直すしかできません。',
       'No save': 'セーブ機能もありません。画像のダウンロードしかできません。',
-      'You can try other great tools': 'もしよりマシなツールが使いたいなら、優秀な開発者が作った良いツールを試してみてください：',
+      'You can try other great tools': 'もしより本格的なツールを使いたいなら、優秀な開発者が作ったこちらのツールを試してみてください：',
       'Close': '閉める'
     }
   }
