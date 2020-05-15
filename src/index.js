@@ -91,6 +91,9 @@ class App extends React.Component {
     }, false);
   }
   loadMapFromUrl(e) {
+    document.querySelectorAll('.error-message').forEach((msg) => {
+      msg.classList.remove('active');
+    });
     const that = this;
     let url;
     if (e.target.id === 'mapUseDefault') {
@@ -129,6 +132,10 @@ class App extends React.Component {
           }
         });
       }
+    })
+    .catch(function(error) {
+      const errorMessageDiv = document.getElementById('url-fetch-error');
+      errorMessageDiv.classList.add('active');
     });
   }
   openModal() {
@@ -598,6 +605,7 @@ class App extends React.Component {
                   <button type='button' id='mapFromUrl' onClick={this.loadMapFromUrl}>{t('Confirm')}</button>
                 </div>
                 <div id='url-error' className='error-message'>{t('Sorry this seems not a correct map image url')}</div>
+                <div id='url-fetch-error' className='error-message'>{t('Sorry can not get image from URL')}</div>
               </form>
             }
           </Translation>

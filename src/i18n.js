@@ -19,6 +19,7 @@ const resources = {
       'Confirm': '確定',
       'Sorry this seems not a correct map image': '抱歉，這好像不是正確的地圖截圖故無法使用。',
       'Sorry this seems not a correct map image url': '抱歉，這好像不是正確的地圖截圖連結。可在圖片上按右鍵「複製圖片位址」再貼上。',
+      'Sorry can not get image from URL': '抱歉，此圖片無法經由連結取得，請先下載再用上傳的方式使用。',
 
       'info': '說明頁',
       'download map': '下載地圖',
@@ -44,6 +45,7 @@ const resources = {
       'Confirm': 'Confirm',
       'Sorry this seems not a correct map image': 'Sorry, this seems not a correct map image.',
       'Sorry this seems not a correct map image url': 'Sorry, this seems not a correct map image URL. You can right click the image then "Copy Image Address."',
+      'Sorry can not get image from URL': 'Sorry, this image can\'t be processed through URL, please download the image then use "Upload image."',
 
       'Info': 'Info',
       'Download map': 'Download map',
@@ -69,6 +71,7 @@ const resources = {
       'Confirm': '確定',
       'Sorry this seems not a correct map image': 'すみません、これは正しいスクリーンショットではなさそうです。',
       'Sorry this seems not a correct map image url': 'すみません、これは正しいURLではなさそうです。画像を右クリックして、「画像のURLをコピー」をしてください。',
+      'Sorry can not get image from URL': 'すみません、この画像はURLから読み込めません。一回ダウンロードして、「アップロード」を使ってください。',
 
       'info': '説明',
       'download map': '地図をダウンロード',
