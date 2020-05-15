@@ -185,6 +185,7 @@ button.link {
   justify-content: center;
   align-items: flex-start;
   padding: 30px;
+  min-width: 1360px;
 }
 
 aside.tool-aside {
