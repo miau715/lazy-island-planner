@@ -59,8 +59,8 @@ const resources = {
     translation: {
       'This is a simple tool for Animal Crossing': 'これはシンプルな「あつまれ どうぶつの森」の島の構想ツールです。',
       'Upload your map screenshot to start': '自分の島の地図のスクリーンショット（下図のような）をアップロードしてください。',
-      'or you can': 'もしくは',
-      'try with my map': '下図の地図で試します',
+      'or you can': 'それとも',
+      'try with my map': '下図の地図で体験してみる',
       'period': '。',
 
       'Upload image': 'アップロード',
