@@ -68,7 +68,7 @@ const resources = {
       'Use the URL of uploaded image': 'SNSに投稿した画像のURLを使用：',
       'Confirm': '確定',
       'Sorry this seems not a correct map image': 'すみません、これは正しいスクリーンショットではなさそうです。',
-      'Sorry this seems not a correct map image url': 'すみません、これは正しいURLではなさそうです。画像に右クリックして、「画像のURLをコピー」してください。',
+      'Sorry this seems not a correct map image url': 'すみません、これは正しいURLではなさそうです。画像を右クリックして、「画像のURLをコピー」をしてください。',
 
       'info': '説明',
       'download map': '地図をダウンロード',
