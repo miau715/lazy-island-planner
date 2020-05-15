@@ -33,7 +33,7 @@ const resources = {
   'en': {
     translation: {
       'This is a simple tool for Animal Crossing': 'This is a simple island planning tool for "Animal Crossing: New Horizons."',
-      'Upload your map screenshot to start': 'Upload the screenshot of your island map (like the image below）to start,　',
+      'Upload your map screenshot to start': 'Upload the screenshot of your island map (like the image below）to start, ',
       'or you can': 'or you can ',
       'try with my map': 'try with my map',
       'period': '.',
@@ -58,9 +58,9 @@ const resources = {
   'ja': {
     translation: {
       'This is a simple tool for Animal Crossing': 'これはシンプルな「あつまれ どうぶつの森」の島の構想ツールです。',
-      'Upload your map screenshot to start': '自分の島の地図のスクリーンショット（下図のような）をアップロードしてください。',
-      'or you can': 'それとも',
-      'try with my map': '下図を使って体験してみる',
+      'Upload your map screenshot to start': '自分の島のスクリーンショット（下図のような）をアップロードして始めてください。',
+      'or you can': '',
+      'try with my map': '下図を使って体験したい人はこちら',
       'period': '。',
 
       'Upload image': 'アップロード',
