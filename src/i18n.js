@@ -58,24 +58,24 @@ const resources = {
   'ja': {
     translation: {
       'This is a simple tool for Animal Crossing': 'これはシンプルな「あつまれ どうぶつの森」の島の構想ツールです。',
-      'Upload your map screenshot to start': '島地図のスクリーンショット（下図のように）をアップロードして、',
+      'Upload your map screenshot to start': '自分の島の地図のスクリーンショット（下図のような）をアップロードしてください。',
       'or you can': 'もしくは',
-      'try with my map': '私の地図でやってみます',
+      'try with my map': '下図の地図で試します',
       'period': '。',
 
       'Upload image': 'アップロード',
       'or': 'または',
-      'Use the URL of uploaded image': 'アップロードした画像のURLを使用：',
+      'Use the URL of uploaded image': 'SNSに投稿した画像のURLを使用：',
       'Confirm': '確定',
       'Sorry this seems not a correct map image': 'すみません、これは正しいスクリーンショットではなさそうです。',
-      'Sorry this seems not a correct map image url': 'すみません、これは正しい URL ではなさそうです。画像に右クリックして、「画像のURLをコピー」してください。',
+      'Sorry this seems not a correct map image url': 'すみません、これは正しいURLではなさそうです。画像に右クリックして、「画像のURLをコピー」してください。',
 
       'info': '説明',
       'download map': '地図をダウンロード',
 
       'This is a very simple tool': 'これはとてもシンプルなツールです。',
-      'No undo': '回復機能がありません。リロードして最初からやり直すしかできません。',
-      'No save': 'セーフ機能もありません。画像をダウンロードしかできません。',
+      'No undo': '元に戻す機能がありません。リロードして最初からやり直すしかできません。',
+      'No save': 'セーブ機能もありません。画像をダウンロードしかできません。',
       'You can try other great tools': 'もしよりマシなツールが使いたいなら、優秀な開発者が作った良いツールを試してみてください：',
       'Close': '閉める'
     }
