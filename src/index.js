@@ -471,18 +471,17 @@ class App extends React.Component {
     
     // add img
     if (thisItem.image && (thisTool.tool !== 'bridge' && thisTool.tool !== 'slope')) {
-      const buildImage = new paper.Raster(process.env.PUBLIC_URL + '/' + thisItem.image);
-      buildImage.opacity = 0;
-      const squareSize = this.state.squareSize;
-      
-      const imageSizeSquare = currentTool === 'tree' ? 1 : 2.8;
-      buildImage.onLoad = function() {
-        buildImage.size = new paper.Size(buildImage.width * squareSize * imageSizeSquare / buildImage.height, squareSize * imageSizeSquare);
+      const buildImage = new paper.Group();
+      const that = this;
+      buildImage.importSVG(process.env.PUBLIC_URL + '/' + thisItem.image, function(item) {
+        const squareSize = that.state.squareSize;
+        const imageSizeSquare = currentTool === 'tree' ? 1 : 2.8;
+        const scale =  squareSize * imageSizeSquare / buildImage.bounds.size._height;
+        buildImage.scale(scale);
         buildImage.position = buildItem.position;
         buildImage.locked = true;
-        buildImage.opacity = 1;
         buildItem.addChild(buildImage);
-      };
+      });
     }
     let deletBtnBg = new paper.Shape.Circle({
       center: [buildItem.bounds.size._width, 0], 
