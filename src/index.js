@@ -147,11 +147,12 @@ class App extends React.Component {
   downLoadCanvas() {
     const canvas = this.canvas.current;
     const img = canvas.toDataURL('image/jpg');
-    var a = document.createElement('a');
+    let a = document.createElement('a');
     a.href = img;
     a.download = 'myIslandImg.jpg';
     document.body.appendChild(a);
     a.click();
+    a.remove();
   }
   renderMap(url) {
     const canvas = this.canvas.current;
