@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/lazy-island-planner/precache-manifest.f5c8cdb6a73670b827d13a38533ba1ef.js"
+  "/lazy-island-planner/precache-manifest.fe307a31642cd2456d258f6236ad07a8.js"
 );
 
 self.addEventListener('message', (event) => {
