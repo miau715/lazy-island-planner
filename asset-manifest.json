@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/lazy-island-planner/static/css/main.befb91d8.chunk.css",
-    "main.js": "/lazy-island-planner/static/js/main.f10649b8.chunk.js",
-    "main.js.map": "/lazy-island-planner/static/js/main.f10649b8.chunk.js.map",
+    "main.js": "/lazy-island-planner/static/js/main.3857815d.chunk.js",
+    "main.js.map": "/lazy-island-planner/static/js/main.3857815d.chunk.js.map",
     "runtime-main.js": "/lazy-island-planner/static/js/runtime-main.f1b090b0.js",
     "runtime-main.js.map": "/lazy-island-planner/static/js/runtime-main.f1b090b0.js.map",
     "static/js/2.b7aac72b.chunk.js": "/lazy-island-planner/static/js/2.b7aac72b.chunk.js",
     "static/js/2.b7aac72b.chunk.js.map": "/lazy-island-planner/static/js/2.b7aac72b.chunk.js.map",
     "index.html": "/lazy-island-planner/index.html",
-    "precache-manifest.fe307a31642cd2456d258f6236ad07a8.js": "/lazy-island-planner/precache-manifest.fe307a31642cd2456d258f6236ad07a8.js",
+    "precache-manifest.376dc2bc45bedb7fe2fca15a743ed18e.js": "/lazy-island-planner/precache-manifest.376dc2bc45bedb7fe2fca15a743ed18e.js",
     "service-worker.js": "/lazy-island-planner/service-worker.js",
     "static/css/main.befb91d8.chunk.css.map": "/lazy-island-planner/static/css/main.befb91d8.chunk.css.map",
     "static/js/2.b7aac72b.chunk.js.LICENSE.txt": "/lazy-island-planner/static/js/2.b7aac72b.chunk.js.LICENSE.txt",
@@ -19,6 +19,6 @@
     "static/js/runtime-main.f1b090b0.js",
     "static/js/2.b7aac72b.chunk.js",
     "static/css/main.befb91d8.chunk.css",
-    "static/js/main.f10649b8.chunk.js"
+    "static/js/main.3857815d.chunk.js"
   ]
 }

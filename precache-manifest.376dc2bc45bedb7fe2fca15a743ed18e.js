@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "5932601c6a8c141978c879c0c446816e",
+    "revision": "2bfd38aad7a109c98510b87e0f9a57e6",
     "url": "/lazy-island-planner/index.html"
   },
   {
-    "revision": "ec1685b6b462ccd1f737",
+    "revision": "f80570f874b77d316b47",
     "url": "/lazy-island-planner/static/css/main.befb91d8.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/lazy-island-planner/static/js/2.b7aac72b.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "ec1685b6b462ccd1f737",
-    "url": "/lazy-island-planner/static/js/main.f10649b8.chunk.js"
+    "revision": "f80570f874b77d316b47",
+    "url": "/lazy-island-planner/static/js/main.3857815d.chunk.js"
   },
   {
     "revision": "41e25e3de727faf5e251",
