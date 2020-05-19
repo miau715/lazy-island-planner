@@ -588,6 +588,7 @@ class App extends React.Component {
               <div>
                 <p>{t('This is a simple tool for Animal Crossing')}</p>
                 <p>{t('Upload your map screenshot to start')}{t('or you can')}<button className='link' id='mapUseDefault' onClick={this.loadMapFromUrl}>{t('try with my map')}</button>{t('period')}</p>
+                <p>{t('This is for desktop browser')}</p>
               </div>
             }
           </Translation>

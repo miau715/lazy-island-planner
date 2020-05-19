@@ -12,6 +12,7 @@ const resources = {
       'or you can': '也可以',
       'try with my map': '先用我的地圖試試看',
       'period': '。',
+      'This is for desktop browser': '（建議於桌面版瀏覽器中使用，在行動裝置中可能無法正常操作。）',
 
       'Upload image': '上傳圖檔',
       'or': '或',
@@ -38,6 +39,7 @@ const resources = {
       'or you can': 'or you can ',
       'try with my map': 'try with my map',
       'period': '.',
+      'This is for desktop browser': '(Strongly recommend to open in desktop browser. Might be very buggy in mobile browser.)',
 
       'Upload image': 'Upload image',
       'or': 'Or',
@@ -64,6 +66,7 @@ const resources = {
       'or you can': '',
       'try with my map': '下図を使って体験したい人はこちら',
       'period': '。',
+      'This is for desktop browser': '（デスクトップブラウザ向け。モバイルブラウザの中に使えない可能性が高いです。）',
 
       'Upload image': 'アップロード',
       'or': 'または',
