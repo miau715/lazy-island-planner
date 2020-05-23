@@ -74,7 +74,7 @@ class App extends React.Component {
       img.src = window.URL.createObjectURL(uploadImg);
       img.addEventListener('load', () => {
         const errorMessageDiv = document.getElementById('img-input-error');
-        if (img.width !== setting.imgWidth || img.height !== setting.imgHeight) {
+        if ((img.width !== setting.imgWidth || img.height !== setting.imgHeight) && (parseInt(img.width / img.height * 1000) !== parseInt(setting.imgWidth / setting.imgHeight * 1000)))  {
           errorMessageDiv.classList.add('active');
           return false;
         }
@@ -116,7 +116,7 @@ class App extends React.Component {
         img.src = url;
         img.addEventListener('load', () => {
           const errorMessageDiv = document.getElementById('url-error');
-          if (img.width !== setting.imgWidth || img.height !== setting.imgHeight) {
+          if ((img.width !== setting.imgWidth || img.height !== setting.imgHeight) && (parseInt(img.width / img.height * 1000) !== parseInt(setting.imgWidth / setting.imgHeight * 1000))) {
             errorMessageDiv.classList.add('active');
             return false;
           }
@@ -175,10 +175,14 @@ class App extends React.Component {
     });
     bgRect.fillColor = setting.colorBg;
     raster.onLoad = () => {
+      let imgRatio = 1;
+      if (raster.width !== setting.imgWidth) {
+        imgRatio = raster.width / setting.imgWidth;
+      }
       mapLayer.activate();
-      const mapRasterWidth = setting.sampleEndX - setting.sampleStartX;
-      const mapRasterHeight = setting.sampleEndY - setting.sampleStartY;
-      const mapRaster = raster.getSubRaster(new paper.Rectangle(setting.sampleStartX, setting.sampleStartY, mapRasterWidth, mapRasterHeight));
+      const mapRasterWidth = setting.sampleEndX * imgRatio - setting.sampleStartX * imgRatio;
+      const mapRasterHeight = setting.sampleEndY * imgRatio - setting.sampleStartY * imgRatio;
+      const mapRaster = raster.getSubRaster(new paper.Rectangle(setting.sampleStartX * imgRatio, setting.sampleStartY * imgRatio, mapRasterWidth, mapRasterHeight));
       raster.remove();
       mapRaster.visible = false;
       mapRaster.size = new paper.Size(setting.squarePerBlock * setting.mapXBlock, setting.squarePerBlock * setting.mapYBlock);
