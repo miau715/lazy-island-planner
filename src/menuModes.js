@@ -2,10 +2,10 @@ import React from 'react';
 import MenuBtn from './MenuBtn.js';
 
 function MenuModes(props) {
-  const toolData = props.toolData;
-  const listItems = toolData.map((mode, i) =>
+  const toolData = [...props.toolData];
+  const listItems = toolData.map((tool, i) =>
     <li key={i}>
-      <MenuBtn data={mode} type='mode' isActive={props.currentMode === mode.mode} onClick={props.onClick} />
+      <MenuBtn data={tool[1]} type='mode' isActive={props.currentMode === tool[1].mode} onClick={props.onClick} />
     </li>
   );
   return (
