@@ -66,7 +66,7 @@ const resources = {
       'or you can': '',
       'try with my map': '下図を使って体験したい人はこちら',
       'period': '。',
-      'This is for desktop browser': '（デスクトップブラウザ向け。モバイルブラウザの中に使えない可能性が高いです。）',
+      'This is for desktop browser': '（デスクトップブラウザ向け。モバイルブラウザでは使えない可能性が高いです。）',
 
       'Upload image': 'アップロード',
       'or': 'または',
@@ -83,7 +83,7 @@ const resources = {
       'No undo': '元に戻す機能がありません。リロードして最初からやり直すしかできません。',
       'No save': 'セーブ機能もありません。画像のダウンロードしかできません。',
       'You can try other great tools': 'もしより本格的なツールを使いたいなら、優秀な開発者が作ったこちらのツールを試してみてください：',
-      'Close': '閉める'
+      'Close': '閉じる'
     }
   }
 };
