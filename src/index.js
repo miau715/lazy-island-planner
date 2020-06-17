@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import paper from 'paper';
 import setting from './setting.json';
-import toolData from './toolData.json';
+import { toolData } from './toolData.js';
 import MenuModes from './MenuModes.js';
 import MenuTools from './MenuTools.js';
 import MenuItems from './MenuItems.js';
@@ -30,11 +30,11 @@ class App extends React.Component {
       canvasSizeX: setting.squareSize * setting.squarePerBlock * setting.mapXBlock + setting.mapPadding * 2,
       canvasSizeY: setting.squareSize * setting.squarePerBlock * setting.mapYBlock + setting.mapPadding * 2,
       squareSize: setting.squareSize,
-      currentMode: toolData.toolData[0].mode,
-      currentModeData: toolData.toolData[0],
-      currentTool: toolData.toolData[0].tools[0].tool,
-      currentItem: toolData.toolData[0].colors[0].colorName,
-      customColor: toolData.toolData[0].colors[toolData.toolData[0].colors.length - 1].color[0]
+      currentMode: [...toolData][0][0],
+      currentModeData: [...toolData][0][1],
+      currentTool: [...[...toolData][0][1].tools][0][0],
+      currentItem: [...[...toolData][0][1].colors][0][0],
+      customColor: [...[...toolData][0][1].colors][[...toolData][0][1].colors.size - 1][1].color[0]
     };
   }
   changeLanguage(e) {
@@ -252,22 +252,18 @@ class App extends React.Component {
   changeMode(e) {
     const target = e.target.closest('button');
     const currentMode = target.getAttribute('id');
-    const currentModeData = toolData.toolData.find((data) => {
-      if (data.mode === currentMode) {
-        return data;
-      }
-    });
+    const currentModeData = toolData.get(currentMode);
     let currentItem;
     if (currentMode === 'draw') {
-      currentItem = currentModeData.colors[0].colorName;
+      currentItem = [...currentModeData.colors][0][0];
     }
     else {
-      currentItem = currentModeData.tools[0].items[0].item;
+      currentItem = [...[...currentModeData.tools][0][1].items][0][0]
     }
     this.setState({
       currentMode: currentMode,
       currentModeData: currentModeData,
-      currentTool: currentModeData.tools[0].tool,
+      currentTool: [...currentModeData.tools][0][0],
       currentItem: currentItem
     });
     this.clearBrushHover();
@@ -278,12 +274,7 @@ class App extends React.Component {
     const currentTool = target.getAttribute('id');
     let currentItem = this.state.currentItem;
     if (this.state.currentMode !== 'draw') {
-      const toolData = this.state.currentModeData.tools.find((data) => {
-        if (data.tool === currentTool) {
-          return data;
-        }
-      });
-      currentItem = toolData.items[0].item;
+      currentItem = [...this.state.currentModeData.tools.get(currentTool).items][0][0];
     }
     this.setState({
       currentTool: currentTool,
@@ -320,22 +311,13 @@ class App extends React.Component {
     const drawTool = new paper.Tool();
     drawTool.activate();
     let size, colors;
-    const thisTool = this.state.currentModeData.tools.find((tool) => {
-      if (tool.tool === this.state.currentTool) {
-        return tool;
-      }
-    });
+    const thisTool = this.state.currentModeData.tools.get(this.state.currentTool);
     size = thisTool.size ? thisTool.size : 0;
     if (this.state.currentItem === 'colorCustom') {
       colors = [this.state.customColor];
     }
     else {
-      const thisColors = this.state.currentModeData.colors.find((color) => {
-        if (color.colorName === this.state.currentItem) {
-          return color;
-        }
-      });
-      colors = thisColors.color;
+      colors = this.state.currentModeData.colors.get(this.state.currentItem).color;
     }
     const refPointDist = (size - 1) * setting.squareSize;
 
@@ -421,19 +403,10 @@ class App extends React.Component {
     let baseBlock;
     let buildItem;
     const currentTool = this.state.currentTool;
-    const thisTool = this.state.currentModeData.tools.find((tool) => {
-      if (tool.tool === currentTool) {
-        return tool;
-      }
-    });
-    const thisItem = thisTool.items.find((item) => {
-      if (item.item === this.state.currentItem) {
-        return item;
-      }
-    });
+    const thisTool = this.state.currentModeData.tools.get(currentTool);
+    const thisItem = thisTool.items.get(this.state.currentItem);
     if (this.state.currentMode === 'build') {
       size = thisItem.size;
-
       buildPath = new paper.Shape.Rectangle({
         x: 0, 
         y: 0,
@@ -623,7 +596,7 @@ class App extends React.Component {
           <div className='editor'>
             <aside className='tool-aside'>
               <div className='modes'>
-                <MenuModes toolData={toolData.toolData} currentMode = {this.state.currentMode} onClick={this.changeMode} />
+                <MenuModes toolData={toolData} currentMode = {this.state.currentMode} onClick={this.changeMode} />
               </div>
               
               <div className='tools'>
