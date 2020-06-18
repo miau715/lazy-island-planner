@@ -50,7 +50,7 @@ class App extends React.Component {
       if (this.state.currentMode === 'draw') {
         this.handleDraw();
       }
-      else if ((this.state.currentMode === 'build' || this.state.currentMode === 'plant') && this.state.currentItem) {
+      else if (this.state.currentMode === 'build' || this.state.currentMode === 'plant') {
         this.handleBuildAndPlant();
       }
     }
@@ -258,7 +258,7 @@ class App extends React.Component {
       currentItem = [...currentModeData.colors][0][0];
     }
     else {
-      currentItem = [...[...currentModeData.tools][0][1].items][0][0]
+      currentItem = null;
     }
     this.setState({
       currentMode: currentMode,
@@ -396,86 +396,93 @@ class App extends React.Component {
     paper.project.layers.buildLayer.activate();
     const buildTool = new paper.Tool();
     buildTool.activate();
-    let size;
-    let isBuild = true;
-    let isEdit = false;
-    let buildPath;
-    let baseBlock;
-    let buildItem;
-    const currentTool = this.state.currentTool;
-    const thisTool = this.state.currentModeData.tools.get(currentTool);
-    const thisItem = thisTool.items.get(this.state.currentItem);
-    if (this.state.currentMode === 'build') {
-      size = thisItem.size;
-      buildPath = new paper.Shape.Rectangle({
-        x: 0, 
-        y: 0,
-        width: size[0] * this.state.squareSize,
-        height: size[1] * this.state.squareSize
-      });
+    let isBuild, isEdit, itemSet;
+    if (this.state.currentItem) {
+      let size;
+      isBuild = true;
+      isEdit = false;
+      let buildPath;
+      let baseBlock;
+      let buildItem;
+      const currentTool = this.state.currentTool;
+      const thisTool = this.state.currentModeData.tools.get(currentTool);
+      const thisItem = thisTool.items.get(this.state.currentItem);
+      if (this.state.currentMode === 'build') {
+        size = thisItem.size;
+        buildPath = new paper.Shape.Rectangle({
+          x: 0, 
+          y: 0,
+          width: size[0] * this.state.squareSize,
+          height: size[1] * this.state.squareSize
+        });
 
-      // oblique bridge
-      if (this.state.currentItem === 'b45' || this.state.currentItem === 'b135') {
-        buildPath.size = [2 * this.state.squareSize, 4 * this.state.squareSize];
-        buildPath.rotate(parseInt(this.state.currentItem.replace('b', '')));
-      }
-      buildPath.fillColor = thisItem.color ? thisItem.color : thisTool.color;
-      buildPath.strokeColor = setting.strokeColorBilding;
-      buildItem = new paper.Group([buildPath]);
-    }
-    else if (this.state.currentMode === 'plant') {
-      size = thisTool.size;
-      baseBlock = new paper.Shape.Rectangle({
-        x: 0, 
-        y: 0,
-        width: size[0] * this.state.squareSize,
-        height: size[1] * this.state.squareSize
-      });
-      buildItem = new paper.Group([baseBlock]);
-
-      if (this.state.currentTool === 'tree') {
-        buildPath = new paper.Shape.Circle(new paper.Point(size[0] * this.state.squareSize / 2, size[1] * this.state.squareSize / 2), size[0] * this.state.squareSize * 0.7 / 2);
+        // oblique bridge
+        if (this.state.currentItem === 'b45' || this.state.currentItem === 'b135') {
+          buildPath.size = [2 * this.state.squareSize, 4 * this.state.squareSize];
+          buildPath.rotate(parseInt(this.state.currentItem.replace('b', '')));
+        }
         buildPath.fillColor = thisItem.color ? thisItem.color : thisTool.color;
-        buildPath.strokeColor = setting.strokeColorPlant;
-        buildPath.opacity = 0.5;
+        buildPath.strokeColor = setting.strokeColorBilding;
+        buildItem = new paper.Group([buildPath]);
       }
-      else if (this.state.currentTool === 'flower') {
-        buildPath = new paper.Shape.Circle(new paper.Point(size[0] * this.state.squareSize / 2, size[1] * this.state.squareSize / 2), size[0] * this.state.squareSize / 2);
-        buildPath.fillColor = thisItem.item;
-        buildPath.strokeColor = setting.strokeColorPlant;
+      else if (this.state.currentMode === 'plant') {
+        size = thisTool.size;
+        baseBlock = new paper.Shape.Rectangle({
+          x: 0, 
+          y: 0,
+          width: size[0] * this.state.squareSize,
+          height: size[1] * this.state.squareSize
+        });
+        buildItem = new paper.Group([baseBlock]);
+
+        if (this.state.currentTool === 'tree') {
+          buildPath = new paper.Shape.Circle(new paper.Point(size[0] * this.state.squareSize / 2, size[1] * this.state.squareSize / 2), size[0] * this.state.squareSize * 0.7 / 2);
+          buildPath.fillColor = thisItem.color ? thisItem.color : thisTool.color;
+          buildPath.strokeColor = setting.strokeColorPlant;
+          buildPath.opacity = 0.5;
+        }
+        else if (this.state.currentTool === 'flower') {
+          buildPath = new paper.Shape.Circle(new paper.Point(size[0] * this.state.squareSize / 2, size[1] * this.state.squareSize / 2), size[0] * this.state.squareSize / 2);
+          buildPath.fillColor = thisItem.item;
+          buildPath.strokeColor = setting.strokeColorPlant;
+        }
+        buildItem.addChild(buildPath);
       }
-      buildItem.addChild(buildPath);
-    }
-    
-    // add img
-    if (thisItem.image && (thisTool.tool !== 'bridge' && thisTool.tool !== 'slope')) {
-      const buildImage = new paper.Group();
-      const that = this;
-      buildImage.importSVG(process.env.PUBLIC_URL + '/' + thisItem.image, function(item) {
-        const squareSize = that.state.squareSize;
-        const imageSizeSquare = currentTool === 'tree' ? 1 : 2.8;
-        const scale =  squareSize * imageSizeSquare / buildImage.bounds.size._height;
-        buildImage.scale(scale);
-        buildImage.position = buildItem.position;
-        buildImage.locked = true;
-        buildItem.addChild(buildImage);
+      
+      // add img
+      if (thisItem.image && (thisTool.tool !== 'bridge' && thisTool.tool !== 'slope')) {
+        const buildImage = new paper.Group();
+        const that = this;
+        buildImage.importSVG(process.env.PUBLIC_URL + '/' + thisItem.image, function(item) {
+          const squareSize = that.state.squareSize;
+          const imageSizeSquare = currentTool === 'tree' ? 1 : 2.8;
+          const scale =  squareSize * imageSizeSquare / buildImage.bounds.size._height;
+          buildImage.scale(scale);
+          buildImage.position = buildItem.position;
+          buildImage.locked = true;
+          buildItem.addChild(buildImage);
+        });
+      }
+      let deletBtnBg = new paper.Shape.Circle({
+        center: [buildItem.bounds.size._width, 0], 
+        radius: this.state.squareSize * 0.8
       });
+      deletBtnBg.fillColor = '#555';
+      let deletBtnIcon = new paper.PointText(new paper.Point(buildItem.bounds.size._width - (this.state.squareSize * 1.6 - 6) / 2, (this.state.squareSize * 1.6 - 6) / 2));
+      deletBtnIcon.fillColor = '#eee';
+      deletBtnIcon.content = '×';
+      deletBtnIcon.locked = true;
+      let deletBtn = new paper.Group([deletBtnBg, deletBtnIcon]);
+      deletBtn.name = 'deletBtn';
+      deletBtn.opacity = 0;
+      deletBtn.locked = true;
+      itemSet = new paper.Group([buildItem, deletBtn]);
+      itemSet.position = [setting.hideDist * -1, setting.hideDist * -1];
     }
-    let deletBtnBg = new paper.Shape.Circle({
-      center: [buildItem.bounds.size._width, 0], 
-      radius: this.state.squareSize * 0.8
-    });
-    deletBtnBg.fillColor = '#555';
-    let deletBtnIcon = new paper.PointText(new paper.Point(buildItem.bounds.size._width - (this.state.squareSize * 1.6 - 6) / 2, (this.state.squareSize * 1.6 - 6) / 2));
-    deletBtnIcon.fillColor = '#eee';
-    deletBtnIcon.content = '×';
-    deletBtnIcon.locked = true;
-    let deletBtn = new paper.Group([deletBtnBg, deletBtnIcon]);
-    deletBtn.name = 'deletBtn';
-    deletBtn.opacity = 0;
-    deletBtn.locked = true;
-    let itemSet = new paper.Group([buildItem, deletBtn]);
-    itemSet.position = [setting.hideDist * -1, setting.hideDist * -1];
+    else {
+      isBuild = false;
+      isEdit = true;
+    }
     buildTool.onMouseMove = (e) => {
       if (isBuild) {
         itemSet.position.x = this.getSnapPoint(e.point.x, true, itemSet);
@@ -510,12 +517,13 @@ class App extends React.Component {
           }
           else {
             hitResult.item.parent.parent.remove();
+            itemSet = null;
           }
         }
       }
     }
     buildTool.onMouseDrag = (e) => {
-      if (isEdit) {
+      if (isEdit && itemSet) {
         itemSet.position.x = this.getSnapPoint(e.point.x, true, itemSet);
         itemSet.position.y = this.getSnapPoint(e.point.y, false, itemSet);
       }
