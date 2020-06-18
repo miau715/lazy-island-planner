@@ -322,36 +322,17 @@ class App extends React.Component {
     const refPointDist = (size - 1) * setting.squareSize;
 
     if (!paper.project.activeLayer.children.brush) {
-      let brush = new paper.Shape.Rectangle({
-        x: setting.hideDist * -1, 
-        y: setting.hideDist * -1,
-        width: size * this.state.squareSize,
-        height: size * this.state.squareSize
-      });
-      brush.fillColor = 'rgba(255,255,255,0.1)';
-      brush.strokeColor = 'rgba(255,255,255,0.8)';
-      brush.name = 'brush';
+      this.generateHoverSquare(size);
     }
     else {
       if (paper.project.activeLayer.children.brush.width / this.state.squareSize !== size) {
         paper.project.activeLayer.children.brush.remove();
-        let brush = new paper.Shape.Rectangle({
-          x: setting.hideDist * -1, 
-          y: setting.hideDist * -1,
-          width: size * this.state.squareSize,
-          height: size * this.state.squareSize
-        });
-        brush.fillColor = 'rgba(255,255,255,0.1)';
-        brush.strokeColor = 'rgba(255,255,255,0.8)';
-        brush.name = 'brush';
+        this.generateHoverSquare(size);
       }
     }
-    const brushSquare = paper.project.activeLayer.children.brush;
+    let brushSquare = paper.project.activeLayer.children.brush;
     drawTool.onMouseMove = (e) => {
-      let point = new paper.Point();
-      point.x = e.point.x - (e.point.x - setting.mapPadding) % this.state.squareSize - refPointDist + this.state.squareSize * size / 2;
-      point.y = e.point.y - (e.point.y - setting.mapPadding) % this.state.squareSize - refPointDist + this.state.squareSize * size / 2;
-      brushSquare.position = point;
+      this.getHoverSquarePosition(e, size, refPointDist, brushSquare);
     }
     drawTool.onMouseDown = (e) => {
       if (this.isEditableArea(e.point)) {
@@ -361,8 +342,35 @@ class App extends React.Component {
     drawTool.onMouseDrag = (e) => {
       if (this.isEditableArea(e.point)) {
         this.draw(e, size, refPointDist, colors);
+        paper.project.activeLayer.children.brush.remove();
+        this.generateHoverSquare(size);
+        brushSquare = paper.project.activeLayer.children.brush;
+        this.getHoverSquarePosition(e, size, refPointDist, brushSquare);
       }
     }
+    drawTool.onMouseUp = (e) => {
+      paper.project.activeLayer.children.brush.remove();
+      this.generateHoverSquare(size);
+      brushSquare = paper.project.activeLayer.children.brush;
+      this.getHoverSquarePosition(e, size, refPointDist, brushSquare);
+    }
+  }
+  generateHoverSquare(size) {
+    let brush = new paper.Shape.Rectangle({
+      x: setting.hideDist * -1, 
+      y: setting.hideDist * -1,
+      width: size * this.state.squareSize,
+      height: size * this.state.squareSize
+    });
+    brush.fillColor = 'rgba(255,255,255,0.1)';
+    brush.strokeColor = 'rgba(255,255,255,0.8)';
+    brush.name = 'brush';
+  }
+  getHoverSquarePosition(e, size, refPointDist, brushSquare) {
+    let point = new paper.Point();
+    point.x = e.point.x - (e.point.x - setting.mapPadding) % this.state.squareSize - refPointDist + this.state.squareSize * size / 2;
+    point.y = e.point.y - (e.point.y - setting.mapPadding) % this.state.squareSize - refPointDist + this.state.squareSize * size / 2;
+    brushSquare.position = point;
   }
   draw(e, size, refPointDist, colors) {
     paper.project.layers.drawLayer.activate();
